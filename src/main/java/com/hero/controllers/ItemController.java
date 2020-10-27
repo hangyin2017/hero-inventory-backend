@@ -4,7 +4,6 @@ import com.hero.dtos.item.ItemGetDto;
 import com.hero.dtos.item.ItemPostDto;
 import com.hero.services.ItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
