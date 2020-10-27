@@ -1,7 +1,6 @@
 package com.hero.services;
 
-import com.hero.dto.items.ItemGetDto;
-import lombok.RequiredArgsConstructor;
+import com.hero.dtos.item.ItemGetDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
