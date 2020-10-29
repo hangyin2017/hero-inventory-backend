@@ -39,7 +39,7 @@ public class Item {
     @Column(name = "weight")
     private Double weight;
 
-    @Column(name = "standardPrice")
+    @Column(name = "standard_price")
     private BigDecimal standardPrice;
 
     @Column(name = "cost")
@@ -51,9 +51,9 @@ public class Item {
     @Column(name = "remark")
     private String remark;
 
-    @Column(name = "dateOfAdd")
-    private Date dateOfAdd;
+    @Column(name = "date_of_add")
+    private Date timeOfAdd;
 
-    @Column(name = "shelfLife")
+    @Column(name = "shelf_life")
     private Integer shelfLife;
 }

@@ -17,13 +17,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public ResponseEntity<List<ItemGetDto>> find() {
+    public ResponseEntity<List<ItemGetDto>> getAllItems() {
         List<ItemGetDto> itemGetDtoList = itemService.getAllItems();
         return ResponseEntity.ok(itemGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<ItemGetDto> postItem(@RequestBody ItemPostDto itemPostDto) {
+    public ResponseEntity<ItemGetDto> postItems(@RequestBody ItemPostDto itemPostDto) {
         return ResponseEntity.ok(itemService.postItem(itemPostDto));
     }
 }
