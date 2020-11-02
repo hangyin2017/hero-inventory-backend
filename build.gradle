@@ -1,7 +1,14 @@
+buildscript {
+	ext {
+		flywayVersion = "6.5.7"
+	}
+}
 plugins {
 	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
+	id "org.flywaydb.flyway" version "6.5.7"
+
 }
 
 group = 'com.hero'
@@ -23,6 +30,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
 	implementation 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation "org.flywaydb:flyway-core:6.5.7"
 
 	compile "org.mapstruct:mapstruct:1.4.0.Beta1"
 	annotationProcessor "org.mapstruct:mapstruct-processor:1.4.0.Beta1"

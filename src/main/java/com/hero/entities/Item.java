@@ -3,16 +3,14 @@ package com.hero.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "items")
 public class Item {
 
     @Id
@@ -26,8 +24,8 @@ public class Item {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "unit")
-    private String unit;
+//    @Column(name = "unit")
+//    private String unit;
 
     @Column(name = "brand")
     private String brand;
