@@ -55,5 +55,5 @@ public class Item {
     private Date timeOfAdd;
 
     @Column(name = "shelf_life")
-    private Integer shelfLife;
+    private String shelfLife;
 }

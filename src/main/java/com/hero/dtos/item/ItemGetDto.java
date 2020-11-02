@@ -21,5 +21,5 @@ public class ItemGetDto {
     private Integer quantity;
     private String remark;
     private Date timeOfAdd;
-    private Integer shelfLife;
+    private String shelfLife;
 }

@@ -1,4 +1,4 @@
-INSERT INTO products (code, name, brand, category, supplier, weight, standardPrice, cost, quantity, remark, dateOfAdd, shelfLife)
+INSERT INTO items (code, name, brand, category, supplier, weight, standard_price, cost, quantity, remark, date_of_add, shelf_life)
  VALUES
 ('BXARRA002','Collagen Beauty Essential + Milk Thistle','Arravite','health supplement','ARRA','0.5','98.0','85','100','keep in dry and cool place','2020-09-11','2  years'),
 ('BXARRA001','Collagen Beauty Essential + Prebiotics','Arravite','health supplement','ARRA','0.5','98.0','85','100','keep in dry and cool place','2020-09-11','2 years'),
