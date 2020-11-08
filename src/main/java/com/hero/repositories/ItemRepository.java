@@ -10,7 +10,12 @@ import javax.persistence.Id;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    
+
     List<Item> findByNameLike(@RequestParam String name);
+
+    List<Item> findByCodeLike(@RequestParam String code);
+
+    @Query("select item from Item item where item.name like :searchInput or item.code like :searchInput")
+    List<Item> findByNameOrCodeLike(@RequestParam String searchInput);
 }
 

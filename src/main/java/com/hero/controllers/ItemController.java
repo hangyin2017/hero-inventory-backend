@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/api/item")
 @RequiredArgsConstructor
 public class ItemController {
 
@@ -23,8 +23,8 @@ public class ItemController {
     }
 
     @GetMapping("search")
-    public ResponseEntity<List<ItemGetDto>> findByNameLike(@RequestParam String name) {
-        return ResponseEntity.ok(itemService.findByNameLike(name));
+    public ResponseEntity<List<ItemGetDto>> findByNameLike(@RequestParam String searchInput) {
+        return ResponseEntity.ok(itemService.findByNameOrCodeLike(searchInput));
     }
 
     @PostMapping
