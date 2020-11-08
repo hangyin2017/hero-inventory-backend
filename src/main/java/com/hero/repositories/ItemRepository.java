@@ -15,7 +15,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByCodeLike(@RequestParam String code);
 
-    @Query("select item from Item item where item.name like :searchInput or item.code like :searchInput")
+    @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.code) like :searchInput")
     List<Item> findByNameOrCodeLike(@RequestParam String searchInput);
 }
 

@@ -32,7 +32,7 @@ public class ItemService {
 
     public List<ItemGetDto> findByNameOrCodeLike(String searchInput) {
         List<ItemGetDto> itemGetDtoList = new ArrayList<>();
-        List<Item> itemList = itemRepository.findByNameOrCodeLike("%" + searchInput + "%");
+        List<Item> itemList = itemRepository.findByNameOrCodeLike("%" + searchInput.toLowerCase() + "%");
 
         itemList.forEach(item -> {
             ItemGetDto itemGetDto = itemMapper.itemToItemGetDto(item);
