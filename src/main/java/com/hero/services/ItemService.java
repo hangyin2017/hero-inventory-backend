@@ -30,9 +30,17 @@ public class ItemService {
         return itemGetDtoList;
     }
 
-    //public ItemGetDto getByCode(String code) {
-    //
-    //}
+    public List<ItemGetDto> findByNameLike(String name) {
+        List<ItemGetDto> itemGetDtoList = new ArrayList<>();
+        List<Item> itemList = itemRepository.findByNameLike("%" + name + "%");
+
+        itemList.forEach(item -> {
+            ItemGetDto itemGetDto = itemMapper.itemToItemGetDto(item);
+            itemGetDtoList.add(itemGetDto);
+        });
+
+        return itemGetDtoList;
+    }
 
     public ItemGetDto postItem(ItemPostDto itemPostDto) {
         Item item = itemMapper.itemPostDtoToItem(itemPostDto);

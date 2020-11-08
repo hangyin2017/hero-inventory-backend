@@ -22,6 +22,11 @@ public class ItemController {
         return ResponseEntity.ok(itemGetDtoList);
     }
 
+    @GetMapping("search")
+    public ResponseEntity<List<ItemGetDto>> findByNameLike(@RequestParam String name) {
+        return ResponseEntity.ok(itemService.findByNameLike(name));
+    }
+
     @PostMapping
     public ResponseEntity<ItemGetDto> postItems(@RequestBody ItemPostDto itemPostDto) {
         return ResponseEntity.ok(itemService.postItem(itemPostDto));
