@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,28 +19,20 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
-    public List<ItemGetDto> getAllItems() {
-        List<ItemGetDto> itemGetDtoList = new ArrayList<>();
-        List<Item> itemList = itemRepository.findAll();
-
-        itemList.forEach(item -> {
-            ItemGetDto itemGetDto = itemMapper.itemToItemGetDto(item);
-            itemGetDtoList.add(itemGetDto);
-        });
-
-        return itemGetDtoList;
+    private List<ItemGetDto> itemsToItemGetDtos(List<Item> items) {
+        return items.stream()
+                .map(item -> itemMapper.itemToItemGetDto(item))
+                .collect(Collectors.toList());
     }
 
-    public List<ItemGetDto> findByNameOrCodeLike(String searchInput) {
-        List<ItemGetDto> itemGetDtoList = new ArrayList<>();
-        List<Item> itemList = itemRepository.findByNameOrCodeLike("%" + searchInput.toLowerCase() + "%");
+    public List<ItemGetDto> getAllItems() {
+        return itemsToItemGetDtos(itemRepository.findAll());
+    }
 
-        itemList.forEach(item -> {
-            ItemGetDto itemGetDto = itemMapper.itemToItemGetDto(item);
-            itemGetDtoList.add(itemGetDto);
-        });
+    public List<ItemGetDto> findByNameOrSkuLike(String searchInput) {
+        List<Item> items = itemRepository.findByNameOrSkuLike("%" + searchInput.toLowerCase() + "%");
 
-        return itemGetDtoList;
+        return itemsToItemGetDtos(items);
     }
 
     public ItemGetDto postItem(ItemPostDto itemPostDto) {

@@ -13,9 +13,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByNameLike(@RequestParam String name);
 
-    List<Item> findByCodeLike(@RequestParam String code);
+    List<Item> findBySkuLike(@RequestParam String sku);
 
-    @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.code) like :searchInput")
-    List<Item> findByNameOrCodeLike(@RequestParam String searchInput);
+    @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
+    List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 }
 

@@ -24,7 +24,7 @@ public class ItemController {
 
     @GetMapping("filter")
     public ResponseEntity<List<ItemGetDto>> filterItems(@RequestParam String searchInput) {
-        return ResponseEntity.ok(itemService.findByNameOrCodeLike(searchInput));
+        return ResponseEntity.ok(itemService.findByNameOrSkuLike(searchInput));
     }
 
     @PostMapping
