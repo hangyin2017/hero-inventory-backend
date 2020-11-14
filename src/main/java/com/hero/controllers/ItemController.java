@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/item")
+@RequestMapping("/api/v1/items")
 @RequiredArgsConstructor
 public class ItemController {
 
@@ -22,8 +22,8 @@ public class ItemController {
         return ResponseEntity.ok(itemGetDtoList);
     }
 
-    @GetMapping("search")
-    public ResponseEntity<List<ItemGetDto>> findByNameLike(@RequestParam String searchInput) {
+    @GetMapping("filter")
+    public ResponseEntity<List<ItemGetDto>> filterItems(@RequestParam String searchInput) {
         return ResponseEntity.ok(itemService.findByNameOrCodeLike(searchInput));
     }
 
