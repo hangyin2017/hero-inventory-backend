@@ -1,8 +1,8 @@
 package com.hero.security;
 
 public enum ApplicationUserAuthority {
-    ITEMS_READ("items:read"),
-    ITEMS_WRITE("items:write");
+    ITEMS_READ("item:read"),
+    ITEMS_WRITE("item:write");
 
     private final String authority;
 
