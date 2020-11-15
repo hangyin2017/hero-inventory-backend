@@ -3,7 +3,7 @@ package com.hero.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,11 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static com.hero.security.ApplicationUserAuthority.ITEMS_WRITE;
-import static com.hero.security.ApplicationUserRole.*;
+import static com.hero.security.ApplicationUserRole.ADMIN;
+import static com.hero.security.ApplicationUserRole.SALES;
 
 @EnableWebSecurity
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -30,14 +31,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/api/*/items/**").hasAuthority(ITEMS_WRITE.getAuthority())
-                .antMatchers(HttpMethod.PUT, "/api/*/items/**").hasAuthority(ITEMS_WRITE.getAuthority())
-                .antMatchers(HttpMethod.DELETE, "/api/*/items/**").hasAuthority(ITEMS_WRITE.getAuthority())
-                .antMatchers("/api/*/items/filter*").hasAuthority(ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .httpBasic();
     }
 
     @Override
@@ -46,13 +43,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails jasonUser = User.builder()
                 .username("jason")
                 .password(passwordEncoder.encode("password"))
-                .roles(ADMIN.name())
+                .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails tomUser = User.builder()
                 .username("tom")
                 .password(passwordEncoder.encode("password"))
-                .roles(SALES.name())
+                .authorities(SALES.getGrantedAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(
