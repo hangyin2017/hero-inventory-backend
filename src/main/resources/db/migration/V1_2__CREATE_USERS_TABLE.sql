@@ -4,13 +4,13 @@ CREATE TABLE users (
     encoded_password VARCHAR(100)
 );
 
-CREATE TABLE authoriries (
+CREATE TABLE authorities (
     id SERIAL PRIMARY KEY,
     permission VARCHAR(30)
 );
 
 CREATE TABLE users_authorities (
     user_id INT REFERENCES users (id),
-    authority_id INT REFERENCES authoriries (id),
+    authority_id INT REFERENCES authorities (id),
     PRIMARY KEY (user_id, authority_id)
 );
