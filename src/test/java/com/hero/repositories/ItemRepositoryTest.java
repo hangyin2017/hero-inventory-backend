@@ -15,28 +15,28 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = DemoApplication.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ItemRepositoryTest {
-
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Test
-    public void shouldInsertIntoDBGivenCorrectItemObject() {
-        // Given
-        Item item = new Item();
-        item.setName("beauty1");
-        item.setCode("111");
-
-        // When
-        Item itemInDB = itemRepository.save(item);
-
-        // Then
-        Assertions.assertEquals("beauty1", itemInDB.getName());
-        Assertions.assertEquals("111", itemInDB.getCode());
-    }
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest(classes = DemoApplication.class)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+//public class ItemRepositoryTest {
+//
+//    @Autowired
+//    private ItemRepository itemRepository;
+//
+//    @Test
+//    public void shouldInsertIntoDBGivenCorrectItemObject() {
+//        // Given
+//        Item item = new Item();
+//        item.setName("beauty1");
+//        item.setCode("111");
+//
+//        // When
+//        Item itemInDB = itemRepository.save(item);
+//
+//        // Then
+//        Assertions.assertEquals("beauty1", itemInDB.getName());
+//        Assertions.assertEquals("111", itemInDB.getCode());
+//    }
 
 //    @Test
 //    public void test1(){
@@ -46,4 +46,4 @@ public class ItemRepositoryTest {
 //        List<Item> list= itemRepository.findByBrand(brand);
 //        System.out.println(list.size());
 //    }
-}
+//}
