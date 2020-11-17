@@ -1,7 +1,9 @@
 package com.hero.services;
 
 import com.hero.dtos.brand.BrandGetDto;
+import com.hero.dtos.brand.BrandPostDto;
 import com.hero.dtos.item.ItemGetDto;
+import com.hero.dtos.item.ItemPostDto;
 import com.hero.entities.Brand;
 import com.hero.entities.Item;
 import com.hero.mappers.BrandMapper;
@@ -26,6 +28,12 @@ public class BrandService {
     }
     public List<BrandGetDto> getAllBrands() {
         return fromEntity(brandRepository.findAll());
+    }
+
+    public BrandGetDto addBrand(BrandPostDto brandPostDto) {
+        Brand brand = brandMapper.toEntity(brandPostDto);
+        Brand savedBrand = brandRepository.save(brand);
+        return brandMapper.fromEntity(savedBrand);
     }
 
 }
