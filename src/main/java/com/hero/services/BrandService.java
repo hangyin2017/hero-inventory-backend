@@ -47,12 +47,12 @@ public class BrandService {
 
     public void delete(Long brandId) {
         Brand brand = brandRepository.findById(brandId).orElse(null);
-        List<Item> itemsList = itemRepository.findByBrand(brand);
-        if (itemsList.isEmpty()) {
+        if (brand.getItems() == null || brand.getItems().isEmpty()) {
             brandRepository.deleteById(brandId);
         } else {
             throw new RuntimeException("can not delete.");
         }
+
     }
 
 }
