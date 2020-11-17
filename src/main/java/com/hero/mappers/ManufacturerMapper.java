@@ -15,6 +15,5 @@ public interface ManufacturerMapper {
 
     Manufacturer manufacturerPostDtoToManufacturer(ManufacturerPostDto manufacturerPostDto);
 
-
     void copy(ManufacturerPutDto manufacturerPutDto, @MappingTarget Manufacturer manufacturer);
 }

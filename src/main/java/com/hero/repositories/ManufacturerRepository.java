@@ -13,7 +13,4 @@ public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long
 
     List<Manufacturer> findByNameLike(@RequestParam String name);
 
-    @Modifying(flushAutomatically = true)
-    @Query("update Manufacturer m set m.name = :name")
-    int updateManufacturerName(@Param("name") String name);
 }

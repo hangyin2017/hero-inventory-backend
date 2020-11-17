@@ -48,7 +48,10 @@ public class ManufacturerService {
     }
 
     public void deleteManufacturer(Long manufacturerId) {
-        manufacturerRepository.deleteById(manufacturerId);
+        Manufacturer manufacturer = manufacturerRepository.findById(manufacturerId).orElse(null);
+        if (manufacturer.getItems() == null || manufacturer.getItems().isEmpty()) {
+            manufacturerRepository.deleteById(manufacturerId);
+        }
     }
 
 }
