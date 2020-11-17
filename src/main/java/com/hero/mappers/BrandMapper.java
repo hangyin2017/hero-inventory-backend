@@ -10,7 +10,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BrandMapper {
+
     Brand toEntity(BrandPostDto brandPostDto);
+
     BrandGetDto fromEntity(Brand brand);
+
     void copy(BrandPutDto brandPutDto, @MappingTarget Brand brand);
 }

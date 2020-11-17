@@ -33,7 +33,7 @@ public class ItemServiceTest {
     @BeforeEach
     void setup() { itemService = new ItemService(itemRepository, itemMapper); }
 
-    @Test
+    /*@Test
     public void shouldReturnItemGetDtoListGivenItemsExist() {
         Item item1 = new Item();
         item1.setCode("111");
@@ -46,5 +46,5 @@ public class ItemServiceTest {
         assertNotNull(returnedItemGetDtoList);
         assertEquals(1, returnedItemGetDtoList.size());
     }
-
+*/
 }

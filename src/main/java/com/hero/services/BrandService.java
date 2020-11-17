@@ -4,8 +4,10 @@ import com.hero.dtos.brand.BrandGetDto;
 import com.hero.dtos.brand.BrandPostDto;
 import com.hero.dtos.brand.BrandPutDto;
 import com.hero.entities.Brand;
+import com.hero.entities.Item;
 import com.hero.mappers.BrandMapper;
 import com.hero.repositories.BrandRepository;
+import com.hero.repositories.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +20,14 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
     private final BrandMapper brandMapper;
+    private final ItemRepository itemRepository;
 
     private List<BrandGetDto> fromEntity(List<Brand> brands) {
         return brands.stream()
                 .map(brand -> brandMapper.fromEntity(brand))
                 .collect(Collectors.toList());
     }
+
     public List<BrandGetDto> getAllBrands() {
         return fromEntity(brandRepository.findAll());
     }
@@ -42,7 +46,13 @@ public class BrandService {
     }
 
     public void delete(Long brandId) {
-        brandRepository.deleteById(brandId);
+        Brand brand = brandRepository.findById(brandId).orElse(null);
+        List<Item> itemsList = itemRepository.findByBrand(brand);
+        if (itemsList.isEmpty()) {
+            brandRepository.deleteById(brandId);
+        } else {
+            throw new RuntimeException("can not delete.");
+        }
     }
 
 }
