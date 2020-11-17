@@ -33,4 +33,10 @@ public class BrandController {
     public ResponseEntity<BrandGetDto> update(@PathVariable Long brandId, @RequestBody BrandPutDto brandPutDto) {
         return ResponseEntity.ok(brandService.modify(brandId,brandPutDto));
     }
+
+    @DeleteMapping("/{brandId}")
+    public ResponseEntity delete(@PathVariable Long brandId) {
+        brandService.delete(brandId);
+        return ResponseEntity.ok().build();
+    }
 }

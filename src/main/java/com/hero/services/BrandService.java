@@ -39,7 +39,10 @@ public class BrandService {
         brandMapper.copy(brandPutDto, brand);
         brand.setId(brandId);
         return brandMapper.fromEntity(brandRepository.save(brand));
+    }
 
+    public void delete(Long brandId) {
+        brandRepository.deleteById(brandId);
     }
 
 }
