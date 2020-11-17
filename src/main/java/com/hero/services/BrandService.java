@@ -2,10 +2,8 @@ package com.hero.services;
 
 import com.hero.dtos.brand.BrandGetDto;
 import com.hero.dtos.brand.BrandPostDto;
-import com.hero.dtos.item.ItemGetDto;
-import com.hero.dtos.item.ItemPostDto;
+import com.hero.dtos.brand.BrandPutDto;
 import com.hero.entities.Brand;
-import com.hero.entities.Item;
 import com.hero.mappers.BrandMapper;
 import com.hero.repositories.BrandRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +32,14 @@ public class BrandService {
         Brand brand = brandMapper.toEntity(brandPostDto);
         Brand savedBrand = brandRepository.save(brand);
         return brandMapper.fromEntity(savedBrand);
+    }
+
+    public BrandGetDto modify(Long brandId, BrandPutDto brandPutDto) {
+        Brand brand = new Brand();
+        brandMapper.copy(brandPutDto, brand);
+        brand.setId(brandId);
+        return brandMapper.fromEntity(brandRepository.save(brand));
+
     }
 
 }
