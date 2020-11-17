@@ -9,17 +9,27 @@ import java.util.Date;
 public class ItemGetDto {
 
     private Long id;
-    private String code;
+    private String sku;
+    private String upc;
     private String name;
-    private String unit;
-    private String brand;
+    private String description;
+    private Boolean active;
     private String category;
-    private String supplier;
+    private String brand;
+    private String manufacturer;
+    private BigDecimal sellingPrice;
+    private BigDecimal costPrice;
+    private Boolean applyGst;
+    private Double length;
+    private Double width;
+    private Double height;
     private Double weight;
-    private BigDecimal standardPrice;
-    private BigDecimal cost;
-    private Integer quantity;
-    private String remark;
-    private Date timeOfAdd;
-    private String shelfLife;
+    private String unit;
+    private Integer unitsPerCarton;
+    private Integer unitsPerPallet;
+    private Date createdTime;
+    private Date lastModifiedTime;
+    private Integer physicalStock;
+    private Integer lockedStock;
+    private Integer arrivingQuantity;
 }

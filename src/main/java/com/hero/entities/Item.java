@@ -18,42 +18,74 @@ public class Item {
     @Column(name = "item_id")
     private Long id;
 
-    @Column(name = "code")
-    private String code;
+    @Column(name = "sku")
+    private String sku;
+
+    @Column(name = "upc")
+    private String upc;
 
     @Column(name = "name")
     private String name;
 
-//    @Column(name = "unit")
-//    private String unit;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "brand")
-    private String brand;
+    @Column(name = "active")
+    private Boolean active;
 
     @Column(name = "category")
     private String category;
 
-    @Column(name = "supplier")
-    private String supplier;
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "manufacturer_id")
+    private Manufacturer manufacturer;
+
+    @Column(name = "selling_price")
+    private BigDecimal sellingPrice;
+
+    @Column(name = "cost_price")
+    private BigDecimal costPrice;
+
+    @Column(name = "apply_gst")
+    private Boolean applyGst;
+
+    @Column(name = "length")
+    private Double length;
+
+    @Column(name = "width")
+    private Double width;
+
+    @Column(name = "height")
+    private Double height;
 
     @Column(name = "weight")
     private Double weight;
 
-    @Column(name = "standard_price")
-    private BigDecimal standardPrice;
+    @Column(name = "unit")
+    private String unit;
 
-    @Column(name = "cost")
-    private BigDecimal cost;
+    @Column(name = "units_per_carton")
+    private Integer unitsPerCarton;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "units_per_pallet")
+    private Integer unitsPerPallet;
 
-    @Column(name = "remark")
-    private String remark;
+    @Column(name = "created_time")
+    private Date createdTime;
 
-    @Column(name = "date_of_add")
-    private Date timeOfAdd;
+    @Column(name = "last_modified_time")
+    private Date lastModifiedTime;
 
-    @Column(name = "shelf_life")
-    private String shelfLife;
+    @Column(name = "physical_stock")
+    private Integer physicalStock;
+
+    @Column(name = "locked_stock")
+    private Integer lockedStock;
+
+    @Column(name = "next_arrival")
+    private Integer arrivingQuantity;
 }
