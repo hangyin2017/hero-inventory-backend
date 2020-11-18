@@ -1,5 +1,6 @@
 package com.hero.repositories;
 
+import com.hero.entities.Brand;
 import com.hero.entities.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +18,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
+
+    List<Item> findByBrand(Brand brand);
 }
 

@@ -13,7 +13,7 @@ import java.util.Set;
 public class Brand {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "brand_id")
     private Long id;
 
