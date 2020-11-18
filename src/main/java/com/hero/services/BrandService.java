@@ -4,7 +4,6 @@ import com.hero.dtos.brand.BrandGetDto;
 import com.hero.dtos.brand.BrandPostDto;
 import com.hero.dtos.brand.BrandPutDto;
 import com.hero.entities.Brand;
-import com.hero.entities.Item;
 import com.hero.mappers.BrandMapper;
 import com.hero.repositories.BrandRepository;
 import com.hero.repositories.ItemRepository;
@@ -34,25 +33,29 @@ public class BrandService {
 
     public BrandGetDto addBrand(BrandPostDto brandPostDto) {
         Brand brand = brandMapper.toEntity(brandPostDto);
+
         Brand savedBrand = brandRepository.save(brand);
+
         return brandMapper.fromEntity(savedBrand);
     }
 
     public BrandGetDto modify(Long brandId, BrandPutDto brandPutDto) {
         Brand brand = new Brand();
+
         brandMapper.copy(brandPutDto, brand);
+
         brand.setId(brandId);
+
         return brandMapper.fromEntity(brandRepository.save(brand));
     }
 
     public void delete(Long brandId) {
         Brand brand = brandRepository.findById(brandId).orElse(null);
+
         if (brand.getItems() == null || brand.getItems().isEmpty()) {
             brandRepository.deleteById(brandId);
         } else {
-            throw new RuntimeException("can not delete.");
+            throw new RuntimeException("Can not delete brand with related items.");
         }
-
     }
-
 }

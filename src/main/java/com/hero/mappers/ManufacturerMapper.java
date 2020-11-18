@@ -11,9 +11,10 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ManufacturerMapper {
-    ManufacturerGetDto manufacturerToManufacturerGetDto(Manufacturer manufacturer);
 
-    Manufacturer manufacturerPostDtoToManufacturer(ManufacturerPostDto manufacturerPostDto);
+    ManufacturerGetDto fromEntity(Manufacturer manufacturer);
+
+    Manufacturer toEntity(ManufacturerPostDto manufacturerPostDto);
 
     void copy(ManufacturerPutDto manufacturerPutDto, @MappingTarget Manufacturer manufacturer);
 }
