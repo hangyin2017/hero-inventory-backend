@@ -50,6 +50,6 @@ public class SalesOrder {
     @Column(name = "comments")
     private String comments;
 
-    @OneToMany(mappedBy = "salesorder")
+    @OneToMany(mappedBy = "salesOrder")
     private Set<OrderedItem> orderedItems;
 }
