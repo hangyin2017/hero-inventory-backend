@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -88,4 +89,7 @@ public class Item {
 
     @Column(name = "next_arrival")
     private Integer arrivingQuantity;
+
+    @OneToMany(mappedBy = "item")
+    private Set<OrderedItem> orderedItems;
 }
