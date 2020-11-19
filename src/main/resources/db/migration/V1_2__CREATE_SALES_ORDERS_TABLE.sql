@@ -14,3 +14,4 @@ CREATE TABLE sales_orders (
     total_quality INT,
     comments VARCHAR(255)
 );
+
