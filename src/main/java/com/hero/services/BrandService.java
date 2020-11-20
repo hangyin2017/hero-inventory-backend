@@ -19,7 +19,6 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
     private final BrandMapper brandMapper;
-    private final ItemRepository itemRepository;
 
     private List<BrandGetDto> fromEntity(List<Brand> brands) {
         return brands.stream()

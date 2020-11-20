@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class soldItemPostDto {
+public class SoldItemPostDto {
     private Long itemId;
     private Long orderId;
     private Date createdTime;

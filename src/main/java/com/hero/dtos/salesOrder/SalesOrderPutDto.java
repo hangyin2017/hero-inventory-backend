@@ -5,7 +5,8 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class salesOrderPostDto {
+public class SalesOrderPutDto {
+    private Long salesorderId;
     private String salesorderNumber;
     private String referenceNumber;
     private Date date;

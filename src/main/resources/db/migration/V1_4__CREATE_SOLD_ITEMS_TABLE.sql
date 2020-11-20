@@ -7,3 +7,4 @@ CREATE TABLE sold_items (
     rate NUMERIC(14,2),
     comments VARCHAR(255)
 );
+
