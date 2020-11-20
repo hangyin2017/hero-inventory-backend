@@ -91,5 +91,5 @@ public class Item {
     private Integer arrivingQuantity;
 
     @OneToMany(mappedBy = "item")
-    private Set<OrderedItem> orderedItems;
+    private Set<SoldItem> soldItems;
 }
