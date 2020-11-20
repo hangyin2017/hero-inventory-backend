@@ -25,19 +25,9 @@ public class SoldItem {
     @JoinColumn(name = "order_id")
     private SalesOrder salesOrder;
 
-    @Column(name = "created_time")
-    private Date createdTime;
-
-    @Column(name = "last_modified_time")
-    private Date lastModifiedTime;
-
     @Column(name = "quality")
     private Long quality;
 
     @Column(name = "rate")
     private BigDecimal rate;
-
-    @Column(name = "comments")
-    private String comments;
-
     }
