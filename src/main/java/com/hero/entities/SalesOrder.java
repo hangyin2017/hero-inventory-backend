@@ -51,5 +51,5 @@ public class SalesOrder {
     private String comments;
 
     @OneToMany(mappedBy = "salesOrder")
-    private Set<OrderedItem> orderedItems;
+    private Set<SoldItem> soldItems;
 }

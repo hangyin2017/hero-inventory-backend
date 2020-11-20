@@ -4,17 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "ordered_items")
-public class OrderedItem {
+@Table(name = "sold_items")
+public class SoldItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ordered_item_id")
-    private Long orderedItemId;
+    @Column(name = "sold_item_id")
+    private Long soldItemId;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -27,8 +28,14 @@ public class OrderedItem {
     @Column(name = "created_time")
     private Date createdTime;
 
-    @Column(name = "total_quality")
-    private Long totalQuality;
+    @Column(name = "last_modified_time")
+    private Date lastModifiedTime;
+
+    @Column(name = "quality")
+    private Long quality;
+
+    @Column(name = "rate")
+    private BigDecimal rate;
 
     @Column(name = "comments")
     private String comments;
