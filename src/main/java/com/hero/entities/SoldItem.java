@@ -31,6 +31,7 @@ public class SoldItem {
     @Column(name = "rate")
     private BigDecimal rate;
 
+
 //    @Override
 //    public String toString() {
 //        return "SoldItem{" +

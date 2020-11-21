@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,12 +50,16 @@ public class SalesOrderService {
     @Transactional
     public SalesOrderGetDto modifySalesOrder(Long salesorderId, SalesOrderPutDto salesOrderPutDto) {
         SalesOrder salesOrder = salesOrderRepository.findById(salesorderId).orElse(null);
+        soldItemRepository.deleteBySalesOrder(salesOrder);
         if (salesOrder == null){
             throw new RuntimeException("This salesorder is not exist.");
         }
         salesOrderMapper.copy(salesOrderPutDto, salesOrder);
-        salesOrder.setSalesorderId(salesorderId);
-        return salesOrderMapper.fromEntity(salesOrderRepository.save(salesOrder));
+        SalesOrder saved = salesOrderRepository.save(salesOrder);
+        Set<SoldItem> soldItems = salesOrder.getSoldItems().stream().peek(e-> e.setSalesOrder(saved)).collect(Collectors.toSet());
+        soldItemRepository.saveAll(soldItems);
+        salesOrder.setSoldItems(soldItems);
+        return salesOrderMapper.fromEntity(salesOrder);
     }
 
     @Transactional
@@ -63,19 +68,8 @@ public class SalesOrderService {
         if (salesOrder != null) {
             salesOrderRepository.deleteById(salesOrderId);
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
-                soldItemRepository.deleteById(soldItem.getSoldItemId());
+                soldItemRepository.delete(soldItem);
             }
         }
     }
-
-//    public void delete(Long brandId) {
-//        Brand brand = brandRepository.findById(brandId).orElse(null);
-//
-//        if (brand.getItems() == null || brand.getItems().isEmpty()) {
-//            brandRepository.deleteById(brandId);
-//        } else {
-//            throw new RuntimeException("Can not delete brand with related items.");
-//        }
-//    }
-
 }
