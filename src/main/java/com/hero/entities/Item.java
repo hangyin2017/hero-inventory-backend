@@ -1,5 +1,6 @@
 package com.hero.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -89,7 +90,4 @@ public class Item {
 
     @Column(name = "next_arrival")
     private Integer arrivingQuantity;
-
-    @OneToMany(mappedBy = "item")
-    private Set<SoldItem> soldItems;
 }

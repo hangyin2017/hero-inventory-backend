@@ -8,9 +8,6 @@ import java.util.Date;
 @Data
 public class SoldItemPutDto {
     private Long itemId;
-    private Long orderId;
-    private Date createdTime;
     private Long quality;
     private BigDecimal rate;
-    private String comments;
 }

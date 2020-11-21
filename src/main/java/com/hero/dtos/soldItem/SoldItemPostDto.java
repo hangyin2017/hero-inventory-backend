@@ -9,8 +9,6 @@ import java.util.Date;
 public class SoldItemPostDto {
     private Long itemId;
     private Long orderId;
-    private Date createdTime;
     private Long quality;
     private BigDecimal rate;
-    private String comments;
 }

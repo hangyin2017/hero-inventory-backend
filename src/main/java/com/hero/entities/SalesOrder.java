@@ -1,5 +1,6 @@
 package com.hero.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,6 +51,6 @@ public class SalesOrder {
     @Column(name = "comments")
     private String comments;
 
-    @OneToMany(mappedBy = "salesOrder")
+    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SoldItem> soldItems;
 }
