@@ -1,8 +1,10 @@
 package com.hero.dtos.salesOrder;
 
+import com.hero.entities.SoldItem;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 @Data
 public class SalesOrderPutDto {
@@ -19,4 +21,5 @@ public class SalesOrderPutDto {
     private Date lastModifiedTime;
     private Long totalQuality;
     private String comments;
+    private Set<SoldItem> soldItems;
 }

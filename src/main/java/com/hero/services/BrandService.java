@@ -39,8 +39,10 @@ public class BrandService {
     }
 
     public BrandGetDto modify(Long brandId, BrandPutDto brandPutDto) {
-        Brand brand = new Brand();
-
+        Brand brand = brandRepository.findById(brandId).orElse(null);
+        if (brand == null) {
+            throw new RuntimeException("This brand is not exist.");
+        }
         brandMapper.copy(brandPutDto, brand);
 
         brand.setId(brandId);
