@@ -6,7 +6,6 @@ import com.hero.dtos.brand.BrandPutDto;
 import com.hero.entities.Brand;
 import com.hero.mappers.BrandMapper;
 import com.hero.repositories.BrandRepository;
-import com.hero.repositories.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -3,6 +3,7 @@ package com.hero.services;
 
 import com.hero.dtos.salesOrder.SalesOrderGetDto;
 import com.hero.dtos.salesOrder.SalesOrderPostDto;
+import com.hero.dtos.salesOrder.SalesOrderPutDto;
 import com.hero.entities.SalesOrder;
 import com.hero.entities.SoldItem;
 import com.hero.mappers.SalesOrderMapper;
@@ -44,5 +45,37 @@ public class SalesOrderService {
         }
         return salesOrderMapper.fromEntity(savedOrder);
     }
+
+    @Transactional
+    public SalesOrderGetDto modifySalesOrder(Long salesorderId, SalesOrderPutDto salesOrderPutDto) {
+        SalesOrder salesOrder = salesOrderRepository.findById(salesorderId).orElse(null);
+        if (salesOrder == null){
+            throw new RuntimeException("This salesorder is not exist.");
+        }
+        salesOrderMapper.copy(salesOrderPutDto, salesOrder);
+        salesOrder.setSalesorderId(salesorderId);
+        return salesOrderMapper.fromEntity(salesOrderRepository.save(salesOrder));
+    }
+
+    @Transactional
+    public void deleteSalesOrder(Long salesOrderId) {
+        SalesOrder salesOrder = salesOrderRepository.findById(salesOrderId).orElse(null);
+        if (salesOrder != null) {
+            salesOrderRepository.deleteById(salesOrderId);
+            for (SoldItem soldItem : salesOrder.getSoldItems()) {
+                soldItemRepository.deleteById(soldItem.getSoldItemId());
+            }
+        }
+    }
+
+//    public void delete(Long brandId) {
+//        Brand brand = brandRepository.findById(brandId).orElse(null);
+//
+//        if (brand.getItems() == null || brand.getItems().isEmpty()) {
+//            brandRepository.deleteById(brandId);
+//        } else {
+//            throw new RuntimeException("Can not delete brand with related items.");
+//        }
+//    }
 
 }

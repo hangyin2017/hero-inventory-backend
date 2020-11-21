@@ -1,9 +1,8 @@
 package com.hero.controllers;
 
-import com.hero.dtos.brand.BrandGetDto;
-import com.hero.dtos.brand.BrandPostDto;
 import com.hero.dtos.salesOrder.SalesOrderGetDto;
 import com.hero.dtos.salesOrder.SalesOrderPostDto;
+import com.hero.dtos.salesOrder.SalesOrderPutDto;
 import com.hero.services.SalesOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +25,16 @@ public class SalesOrderController {
     public ResponseEntity<SalesOrderGetDto> addSalesOrder(@RequestBody SalesOrderPostDto salesOrderPostDto) {
         SalesOrderGetDto salesOrderGetDto= salesOrderService.addSalesOrder(salesOrderPostDto);
         return ResponseEntity.ok(salesOrderGetDto);
+    }
+
+    @PutMapping("/{salesorderId}")
+    public ResponseEntity<SalesOrderGetDto> update(@PathVariable Long salesorderId, @RequestBody SalesOrderPutDto salesOrderPutDto) {
+        return ResponseEntity.ok(salesOrderService.modifySalesOrder(salesorderId,salesOrderPutDto));
+    }
+
+    @DeleteMapping("/{salesorderId}")
+    public ResponseEntity delete(@PathVariable Long salesorderId) {
+        salesOrderService.deleteSalesOrder(salesorderId);
+        return ResponseEntity.ok().build();
     }
 }
