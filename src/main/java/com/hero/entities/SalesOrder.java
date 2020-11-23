@@ -44,8 +44,8 @@ public class SalesOrder {
     @Column(name = "created_time")
     private Date createdTime;
 
-    @Column(name = "total_quality")
-    private Long totalQuality;
+    @Column(name = "total_quantity")
+    private Long totalQuantity;
 
     @Column(name = "comments")
     private String comments;

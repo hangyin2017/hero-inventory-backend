@@ -25,8 +25,8 @@ public class SoldItem {
     @JoinColumn(name = "order_id", referencedColumnName = "salesorder_id")
     private SalesOrder salesOrder;
 
-    @Column(name = "quality")
-    private Long quality;
+    @Column(name = "quantity")
+    private Long quantity;
 
     @Column(name = "rate")
     private BigDecimal rate;

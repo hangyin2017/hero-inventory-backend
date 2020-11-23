@@ -11,7 +11,7 @@ CREATE TABLE salesorders (
     creator_id INT REFERENCES users (id),
     created_time TIMESTAMP WITH TIME ZONE,
     last_modified_time TIMESTAMP WITH TIME ZONE,
-    total_quality INT,
+    total_quantity INT,
     comments VARCHAR(255)
 );
 
