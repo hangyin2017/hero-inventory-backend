@@ -6,7 +6,6 @@ import com.hero.dtos.brand.BrandPutDto;
 import com.hero.entities.Brand;
 import com.hero.mappers.BrandMapper;
 import com.hero.repositories.BrandRepository;
-import com.hero.repositories.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
     private final BrandMapper brandMapper;
-    private final ItemRepository itemRepository;
 
     private List<BrandGetDto> fromEntity(List<Brand> brands) {
         return brands.stream()
@@ -40,8 +38,10 @@ public class BrandService {
     }
 
     public BrandGetDto modify(Long brandId, BrandPutDto brandPutDto) {
-        Brand brand = new Brand();
-
+        Brand brand = brandRepository.findById(brandId).orElse(null);
+        if (brand == null) {
+            throw new RuntimeException("This brand is not exist.");
+        }
         brandMapper.copy(brandPutDto, brand);
 
         brand.setId(brandId);
