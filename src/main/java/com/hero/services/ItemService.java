@@ -2,6 +2,7 @@ package com.hero.services;
 
 import com.hero.dtos.item.ItemGetDto;
 import com.hero.dtos.item.ItemPostDto;
+import com.hero.dtos.item.ItemPutDto;
 import com.hero.entities.Item;
 import com.hero.mappers.ItemMapper;
 import com.hero.repositories.ItemRepository;
@@ -41,6 +42,18 @@ public class ItemService {
         Item savedItem = itemRepository.save(item);
 
         return itemMapper.itemToItemGetDto(savedItem);
+    }
+
+    public ItemGetDto update(Long itemId, ItemPutDto itemPutDto){
+        Item item = new Item();
+        itemMapper.copy(itemPutDto, item);
+        item.setId(itemId);
+        return itemMapper.itemToItemGetDto(itemRepository.save(item));
+
+    }
+    public void delete(Long itemId){
+        Item item = itemRepository.findById(itemId).orElse(null);
+        itemRepository.deleteById(itemId);
     }
 
 
