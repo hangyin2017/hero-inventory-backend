@@ -65,7 +65,9 @@ public class SalesOrderService {
     @Transactional
     public void deleteSalesOrder(Long salesOrderId) {
         SalesOrder salesOrder = salesOrderRepository.findById(salesOrderId).orElse(null);
-        if (salesOrder != null) {
+        if (salesOrder == null) {
+            throw new RuntimeException("This salesorder is not exist.");
+        } else {
             salesOrderRepository.deleteById(salesOrderId);
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
                 soldItemRepository.delete(soldItem);
