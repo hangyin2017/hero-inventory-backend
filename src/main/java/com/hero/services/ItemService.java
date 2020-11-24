@@ -53,7 +53,11 @@ public class ItemService {
     }
     public void delete(Long itemId){
         Item item = itemRepository.findById(itemId).orElse(null);
-        itemRepository.deleteById(itemId);
+        if (item.getBrand()==null||item.getBrand().getItems().isEmpty()){
+            itemRepository.deleteById(itemId);
+        }else{
+            throw new RuntimeException("Cannot delete item with related brand");
+        }
     }
 
 
