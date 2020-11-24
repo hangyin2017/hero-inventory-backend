@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ItemMapper {
 
@@ -18,4 +20,5 @@ public interface ItemMapper {
     ItemGetDto itemToItemGetDto(Item item);
 
     Item itemPostDtoToItem(ItemPostDto itemPostDto);
+
 }
