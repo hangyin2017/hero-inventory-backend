@@ -9,7 +9,6 @@ import com.hero.repositories.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,14 +19,26 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
+    private Item findItem(Long id) {
+        Item item = itemRepository.findById(id).orElse(null);
+
+        if (item == null) { throw new RuntimeException("Item id=" + id + " does not exist."); }
+
+        return item;
+    }
+
     private List<ItemGetDto> itemsToItemGetDtos(List<Item> items) {
         return items.stream()
-                .map(item -> itemMapper.itemToItemGetDto(item))
+                .map(item -> itemMapper.fromEntity(item))
                 .collect(Collectors.toList());
     }
 
-    public List<ItemGetDto> getAllItems() {
+    public List<ItemGetDto> getAll() {
         return itemsToItemGetDtos(itemRepository.findAll());
+    }
+
+    public ItemGetDto getOne(Long id) {
+        return itemMapper.fromEntity(findItem(id));
     }
 
     public List<ItemGetDto> findByNameOrSkuLike(String searchInput) {
@@ -36,29 +47,25 @@ public class ItemService {
         return itemsToItemGetDtos(items);
     }
 
-    public ItemGetDto postItem(ItemPostDto itemPostDto) {
-        Item item = itemMapper.itemPostDtoToItem(itemPostDto);
+    public ItemGetDto addOne(ItemPostDto itemPostDto) {
+        Item item = itemMapper.toEntity(itemPostDto);
 
         Item savedItem = itemRepository.save(item);
 
-        return itemMapper.itemToItemGetDto(savedItem);
+        return itemMapper.fromEntity(savedItem);
     }
 
-    public ItemGetDto update(Long itemId, ItemPutDto itemPutDto){
-        Item item = new Item();
+    public ItemGetDto update(Long id, ItemPutDto itemPutDto){
+        Item item = findItem(id);
+
         itemMapper.copy(itemPutDto, item);
-        item.setId(itemId);
-        return itemMapper.itemToItemGetDto(itemRepository.save(item));
+        item.setId(id);
 
-    }
-    public void delete(Long itemId){
-        Item item = itemRepository.findById(itemId).orElse(null);
-        if (item.getBrand()==null||item.getBrand().getItems().isEmpty()){
-            itemRepository.deleteById(itemId);
-        }else{
-            throw new RuntimeException("Cannot delete item with related brand");
-        }
+        return itemMapper.fromEntity(itemRepository.save(item));
     }
 
-
+    public void delete(Long id){
+        Item item = findItem(id);
+        itemRepository.deleteById(id);
+    }
 }

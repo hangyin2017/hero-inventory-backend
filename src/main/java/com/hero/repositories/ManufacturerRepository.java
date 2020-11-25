@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ManufacturerRepository extends JpaRepository<Manufacturer, Long> {
 
+    Manufacturer findByName(String name);
+
     List<Manufacturer> findByNameLike(@RequestParam String name);
 }
