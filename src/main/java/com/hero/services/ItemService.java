@@ -66,6 +66,7 @@ public class ItemService {
 
     public void delete(Long id){
         Item item = findItem(id);
+
         itemRepository.deleteById(id);
     }
 }
