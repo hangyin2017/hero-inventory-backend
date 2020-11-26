@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class ItemPostDto {
-
+public class ItemPutDto {
+    private Long id;
     private String sku;
     private String upc;
     private String name;
@@ -32,4 +32,3 @@ public class ItemPostDto {
     private Integer lockedStock;
     private Integer arrivingQuantity;
 }
-
