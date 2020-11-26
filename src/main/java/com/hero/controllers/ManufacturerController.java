@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/manufacturers")
+@CrossOrigin
 @RequiredArgsConstructor
 public class ManufacturerController {
 
