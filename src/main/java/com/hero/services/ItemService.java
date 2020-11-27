@@ -9,7 +9,6 @@ import com.hero.repositories.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,11 +29,11 @@ public class ItemService {
 
     private List<ItemGetDto> itemsToItemGetDtos(List<Item> items) {
         return items.stream()
-                .map(item -> itemMapper.itemToItemGetDto(item))
+                .map(item -> itemMapper.fromEntity(item))
                 .collect(Collectors.toList());
     }
 
-    public List<ItemGetDto> getAllItems() {
+    public List<ItemGetDto> getAll() {
         return itemsToItemGetDtos(itemRepository.findAll());
     }
 
@@ -53,7 +52,7 @@ public class ItemService {
 
         Item savedItem = itemRepository.save(item);
 
-        return itemMapper.itemToItemGetDto(savedItem);
+        return itemMapper.fromEntity(savedItem);
     }
 
     public ItemGetDto update(Long id, ItemPutDto itemPutDto){
