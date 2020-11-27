@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/items")
 @CrossOrigin
+@RequestMapping("/api/v1/items")
 @RequiredArgsConstructor
 public class ItemController {
 
@@ -48,9 +48,9 @@ public class ItemController {
         return ResponseEntity.ok(itemService.update(id, itemPutDto));
     }
 
-    @DeleteMapping("/{itemId}")
-    public ResponseEntity delete(@PathVariable Long itemId){
-        itemService.delete(itemId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        itemService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

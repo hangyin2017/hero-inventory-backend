@@ -1,6 +1,7 @@
 package com.hero.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -90,4 +91,8 @@ public class Item {
 
     @Column(name = "next_arrival")
     private Integer arrivingQuantity;
+
+
 }
+
+

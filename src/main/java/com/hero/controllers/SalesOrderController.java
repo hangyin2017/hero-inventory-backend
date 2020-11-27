@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/salesorder")
@@ -22,9 +23,9 @@ public class SalesOrderController {
     }
 
     @PostMapping
-    public ResponseEntity<SalesOrderGetDto> addSalesOrder(@RequestBody SalesOrderPostDto salesOrderPostDto) {
-        SalesOrderGetDto salesOrderGetDto= salesOrderService.addSalesOrder(salesOrderPostDto);
-        return ResponseEntity.ok(salesOrderGetDto);
+    public ResponseEntity<Map<String, Object>> addSalesOrder(@RequestBody SalesOrderPostDto salesOrderPostDto) {
+        Map<String, Object> salesOrderMap= salesOrderService.addSalesOrder(salesOrderPostDto);
+        return ResponseEntity.ok(salesOrderMap);
     }
 
     @PutMapping("/{salesorderId}")
