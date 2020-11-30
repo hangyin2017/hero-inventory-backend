@@ -42,7 +42,7 @@ public class ManufacturerService {
             Manufacturer savedManufacturer = manufacturerRepository.save(manufacturer);
             return manufacturerMapper.fromEntity(savedManufacturer);
         } catch (Exception e) {
-            throw new RuntimeException("Manufacturer '" + manufacturerPostDto.getName() + "' already exists.");
+            throw new RuntimeException("Manufacturer '" + manufacturerPostDto.getName() + "' already exists");
         }
     }
 
