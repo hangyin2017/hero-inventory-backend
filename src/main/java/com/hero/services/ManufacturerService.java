@@ -37,9 +37,13 @@ public class ManufacturerService {
 
     public ManufacturerGetDto postManufacturer(ManufacturerPostDto manufacturerPostDto) {
         Manufacturer manufacturer = manufacturerMapper.toEntity(manufacturerPostDto);
-        Manufacturer savedManufacturer = manufacturerRepository.save(manufacturer);
 
-        return manufacturerMapper.fromEntity(savedManufacturer);
+        try {
+            Manufacturer savedManufacturer = manufacturerRepository.save(manufacturer);
+            return manufacturerMapper.fromEntity(savedManufacturer);
+        } catch (Exception e) {
+            throw new RuntimeException("Manufacturer '" + manufacturerPostDto.getName() + "' already exists.");
+        }
     }
 
     public ManufacturerGetDto modifyManufacturer(Long manufacturerId, ManufacturerPutDto manufacturerPutDto) {
