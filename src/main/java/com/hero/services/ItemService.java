@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,11 @@ public class ItemService {
         List<Item> items = itemRepository.findByNameOrSkuLike("%" + searchInput.toLowerCase() + "%");
 
         return itemsToItemGetDtos(items);
+    }
+
+    public ItemGetDto findItemById(Long itemId) {
+        ItemGetDto itemGetDto = itemMapper.itemToItemGetDto(itemRepository.getOne(itemId));
+        return itemGetDto;
     }
 
     public ItemGetDto postItem(ItemPostDto itemPostDto) {
