@@ -29,13 +29,13 @@ public class SupplierController {
 
     @PutMapping("/{supplierId}")
     public ResponseEntity<SupplierGetDto> modifySuppliers(@PathVariable Long supplierId, @RequestBody SupplierPutDto supplierPutDto) {
-        SupplierGetDto supplierGetDto = supplierService.modifySupplier(supplierId, supplierPutDto);
+        SupplierGetDto supplierGetDto = supplierService.modify(supplierId, supplierPutDto);
         return ResponseEntity.ok(supplierGetDto);
     }
 
     @DeleteMapping("/{supplierId}")
     public ResponseEntity deleteSuppliers(@PathVariable Long supplierId) {
-        supplierService.deleteSupplier(supplierId);
+        supplierService.delete(supplierId);
         return ResponseEntity.ok().build();
     }
 }

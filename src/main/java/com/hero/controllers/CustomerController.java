@@ -28,14 +28,14 @@ public class CustomerController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerGetDto> modifyCustomers(@PathVariable Long customerId, @RequestBody CustomerPutDto customerPutDto) {
-        CustomerGetDto customerGetDto = customerService.modifyContact(customerId, customerPutDto);
+    public ResponseEntity<CustomerGetDto> update(@PathVariable Long customerId, @RequestBody CustomerPutDto customerPutDto) {
+        CustomerGetDto customerGetDto = customerService.modify(customerId, customerPutDto);
         return ResponseEntity.ok(customerGetDto);
     }
 
     @DeleteMapping("/{customerId}")
     public ResponseEntity deleteCustomers(@PathVariable Long customerId) {
-        customerService.deleteCustomer(customerId);
+        customerService.delete(customerId);
         return ResponseEntity.ok().build();
     }
 }

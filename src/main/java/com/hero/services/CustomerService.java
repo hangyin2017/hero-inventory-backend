@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     public List<CustomerGetDto> findByName(String name) {
-        List<Customer> customers = customerRepository.findByNameLike("%" + name.toLowerCase() +"%");
+        List<Customer> customers = customerRepository.findByNameLike("%" + name.toLowerCase() + "%");
 
         return fromEntity(customers);
     }
@@ -42,22 +42,25 @@ public class CustomerService {
         return customerMapper.fromEntity(savedCustomer);
     }
 
-    public CustomerGetDto modifyContact(Long customerId, CustomerPutDto customerPutDto) {
-        Customer customer = new Customer();
-
+    public CustomerGetDto modify(Long customerId, CustomerPutDto customerPutDto) {
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        if (customer == null) {
+            throw new RuntimeException("This customer is not exist.");
+        }
         customerMapper.copy(customerPutDto, customer);
+
         customer.setId(customerId);
 
         return customerMapper.fromEntity(customerRepository.save(customer));
     }
 
-    public void deleteCustomer(Long customerId) {
+    public void delete(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElse(null);
 
         if (customer.getSalesOrders() == null || customer.getSalesOrders().isEmpty()) {
             customerRepository.deleteById(customerId);
         } else {
-            throw new RuntimeException("Can not delete manufacturer with related items.");
+            throw new RuntimeException("Can not delete customer with related items.");
         }
     }
 }

@@ -1,8 +1,11 @@
 package com.hero.services;
 
+import com.hero.dtos.customer.CustomerGetDto;
+import com.hero.dtos.customer.CustomerPutDto;
 import com.hero.dtos.supplier.SupplierGetDto;
 import com.hero.dtos.supplier.SupplierPostDto;
 import com.hero.dtos.supplier.SupplierPutDto;
+import com.hero.entities.Customer;
 import com.hero.entities.Supplier;
 import com.hero.mappers.SupplierMapper;
 import com.hero.repositories.SupplierRepository;
@@ -42,22 +45,25 @@ public class SupplierService {
         return supplierMapper.fromEntity(savedSupplier);
     }
 
-    public SupplierGetDto modifySupplier(Long supplierId, SupplierPutDto supplierPutDto) {
-        Supplier supplier = new Supplier();
+    public SupplierGetDto modify(Long supplierId, SupplierPutDto supplierPutDto) {
+        Supplier customer = supplierRepository.findById(supplierId).orElse(null);
+        if (supplierId == null) {
+            throw new RuntimeException("This supplier is not exist.");
+        }
+        supplierMapper.copy(supplierPutDto, customer);
 
-        supplierMapper.copy(supplierPutDto, supplier);
-        supplier.setId(supplierId);
+        customer.setId(supplierId);
 
-        return supplierMapper.fromEntity(supplierRepository.save(supplier));
+        return supplierMapper.fromEntity(supplierRepository.save(customer));
     }
 
-    public void deleteSupplier(Long supplierId) {
+    public void delete(Long supplierId) {
         Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
 
         if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
             supplierRepository.deleteById(supplierId);
         } else {
-            throw new RuntimeException("Can not delete manufacturer with related items.");
+            throw new RuntimeException("Can not delete supplier with related items.");
         }
     }
 }
