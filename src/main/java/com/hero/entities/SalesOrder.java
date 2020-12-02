@@ -54,7 +54,6 @@ public class SalesOrder {
     private Set<SoldItem> soldItems;
 
     @ManyToOne
-    @JoinColumn(name = "customers_id", referencedColumnName = "customers_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
-
 }

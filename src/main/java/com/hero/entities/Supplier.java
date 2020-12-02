@@ -3,12 +3,8 @@ package com.hero.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -21,7 +17,7 @@ public class Supplier {
     private Long id;
 
     @Column(name = "suppliers_name")
-    private String supplierName;
+    private String name;
 
     @Column(name = "company_name")
     private String companyName;
@@ -56,7 +52,7 @@ public class Supplier {
     @Column(name = "comments")
     private String comments;
 
-    @OneToMany(mappedBy = "supplier")
-    private Set<PurchaseOrder> purchaseOrders;
+    //@OneToMany(mappedBy = "supplier")
+    //private Set<PurchaseOrder> purchaseOrders;
 
 }

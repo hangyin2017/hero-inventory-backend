@@ -1,11 +1,8 @@
 package com.hero.services;
 
-import com.hero.dtos.customer.CustomerGetDto;
-import com.hero.dtos.customer.CustomerPutDto;
 import com.hero.dtos.supplier.SupplierGetDto;
 import com.hero.dtos.supplier.SupplierPostDto;
 import com.hero.dtos.supplier.SupplierPutDto;
-import com.hero.entities.Customer;
 import com.hero.entities.Supplier;
 import com.hero.mappers.SupplierMapper;
 import com.hero.repositories.SupplierRepository;
@@ -60,10 +57,10 @@ public class SupplierService {
     public void delete(Long supplierId) {
         Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
 
-        if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
-            supplierRepository.deleteById(supplierId);
-        } else {
-            throw new RuntimeException("Can not delete supplier with related items.");
-        }
+        //if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
+        //    supplierRepository.deleteById(supplierId);
+        //} else {
+        //    throw new RuntimeException("Can not delete supplier with related items.");
+        //}
     }
 }

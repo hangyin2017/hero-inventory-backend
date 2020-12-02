@@ -13,4 +13,4 @@ CREATE TABLE customers (
     created_time TIMESTAMP WITH TIME ZONE,
     last_modified_time TIMESTAMP WITH TIME ZONE,
     comments VARCHAR(100)
-     );
+);

@@ -15,13 +15,14 @@ import java.util.Set;
 @Setter
 @Table(name = "customers")
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customers_id")
     private Long id;
 
     @Column(name = "customers_name")
-    private String customerName;
+    private String name;
 
     @Column(name = "company_name")
     private String companyName;
@@ -58,5 +59,4 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private Set<SalesOrder> salesOrders;
-
 }
