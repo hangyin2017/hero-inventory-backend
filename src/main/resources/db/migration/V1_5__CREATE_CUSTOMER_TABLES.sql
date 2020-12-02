@@ -12,5 +12,5 @@ CREATE TABLE customers (
     phone VARCHAR(20),
     created_time TIMESTAMP WITH TIME ZONE,
     last_modified_time TIMESTAMP WITH TIME ZONE,
-    comments VARCHAR(100),
-);
+    comments VARCHAR(100)
+     );

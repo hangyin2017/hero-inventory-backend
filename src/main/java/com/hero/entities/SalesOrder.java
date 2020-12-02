@@ -52,4 +52,9 @@ public class SalesOrder {
 
     @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SoldItem> soldItems;
+
+    @ManyToOne
+    @JoinColumn(name = "customers_id", referencedColumnName = "customers_id")
+    private Customer customer;
+
 }

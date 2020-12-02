@@ -56,7 +56,7 @@ public class Supplier {
     @Column(name = "comments")
     private String comments;
 
-    @OneToMany(mappedBy = "purchaseOrder")
+    @OneToMany(mappedBy = "supplier")
     private Set<PurchaseOrder> purchaseOrders;
 
 }
