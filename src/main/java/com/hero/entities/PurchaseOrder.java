@@ -10,15 +10,15 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "salesorders")
-public class SalesOrder {
+@Table(name = "purchaseorders")
+public class PurchaseOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "salesorder_id")
-    private Long salesorderId;
+    @Column(name = "purchaseorder_id")
+    private Long purchaseorderId;
 
-    @Column(name = "salesorder_number")
-    private String salesorderNumber;
+    @Column(name = "purchaseorder_number")
+    private String purchaseorderNumber;
 
     @Column(name = "reference_number")
     private String referenceNumber;
@@ -50,10 +50,10 @@ public class SalesOrder {
     @Column(name = "comments")
     private String comments;
 
-    @OneToMany(mappedBy = "salesOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<SoldItem> soldItems;
+    @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<PurchasedItem> purchasedItems;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "supply_id")
+    private Supplier supplier;
 }

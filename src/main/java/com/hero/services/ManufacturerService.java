@@ -25,7 +25,7 @@ public class ManufacturerService {
                 .collect(Collectors.toList());
     }
 
-    public List<ManufacturerGetDto> getAllManufacturers() {
+    public List<ManufacturerGetDto> getAll() {
         return fromEntity(manufacturerRepository.findAll());
     }
 
@@ -35,7 +35,7 @@ public class ManufacturerService {
         return fromEntity(manufacturers);
     }
 
-    public ManufacturerGetDto postManufacturer(ManufacturerPostDto manufacturerPostDto) {
+    public ManufacturerGetDto addOne(ManufacturerPostDto manufacturerPostDto) {
         Manufacturer manufacturer = manufacturerMapper.toEntity(manufacturerPostDto);
 
         try {
@@ -46,7 +46,7 @@ public class ManufacturerService {
         }
     }
 
-    public ManufacturerGetDto modifyManufacturer(Long manufacturerId, ManufacturerPutDto manufacturerPutDto) {
+    public ManufacturerGetDto update(Long manufacturerId, ManufacturerPutDto manufacturerPutDto) {
        Manufacturer manufacturer = new Manufacturer();
 
        manufacturerMapper.copy(manufacturerPutDto, manufacturer);
@@ -55,7 +55,7 @@ public class ManufacturerService {
        return manufacturerMapper.fromEntity(manufacturerRepository.save(manufacturer));
     }
 
-    public void deleteManufacturer(Long manufacturerId) {
+    public void delete(Long manufacturerId) {
         Manufacturer manufacturer = manufacturerRepository.findById(manufacturerId).orElse(null);
 
         if (manufacturer.getItems() == null || manufacturer.getItems().isEmpty()) {

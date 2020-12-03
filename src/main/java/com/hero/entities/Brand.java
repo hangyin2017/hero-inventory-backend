@@ -23,3 +23,4 @@ public class Brand {
     @OneToMany(mappedBy = "brand")
     private Set<Item> items;
 }
+
