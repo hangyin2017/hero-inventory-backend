@@ -17,7 +17,7 @@ public class Brand {
     @Column(name = "brand_id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "brand")

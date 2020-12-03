@@ -2,23 +2,41 @@ package com.hero.mappers;
 
 import com.hero.dtos.item.ItemGetDto;
 import com.hero.dtos.item.ItemPostDto;
+import com.hero.dtos.item.ItemPutDto;
+import com.hero.entities.Brand;
 import com.hero.entities.Item;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.ReportingPolicy;
-
-import java.util.List;
+import com.hero.entities.Manufacturer;
+import com.hero.repositories.BrandRepository;
+import com.hero.repositories.ManufacturerRepository;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ItemMapper {
+public abstract class ItemMapper {
 
-    @Mappings({
-        @Mapping(source = "brand.name", target = "brand"),
-        @Mapping(source = "manufacturer.name", target = "manufacturer")
-    })
-    ItemGetDto itemToItemGetDto(Item item);
+    @Autowired
+    private BrandRepository brandRepository;
 
-    Item itemPostDtoToItem(ItemPostDto itemPostDto);
+    @Autowired
+    private ManufacturerRepository manufacturerRepository;
 
+    @Mapping(source = "brand.name", target = "brand")
+    @Mapping(source = "manufacturer.name", target = "manufacturer")
+    public abstract ItemGetDto fromEntity(Item item);
+
+    @Mapping(source = "brand", target = "brand")
+    @Mapping(source = "manufacturer", target = "manufacturer")
+    public abstract Item toEntity(ItemPostDto itemPostDto);
+
+    @Mapping(source = "brand", target = "brand")
+    @Mapping(source = "manufacturer", target = "manufacturer")
+    public abstract void copy(ItemPutDto itemPutDto, @MappingTarget Item item);
+
+    public Manufacturer nameToManufacturer(String name) {
+        return manufacturerRepository.findByName(name);
+    }
+
+    public Brand nameToBrand(String name) {
+        return brandRepository.findByName(name);
+    }
 }
