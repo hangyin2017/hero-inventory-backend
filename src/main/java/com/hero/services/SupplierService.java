@@ -30,7 +30,7 @@ public class SupplierService {
     }
 
     public List<SupplierGetDto> findByName(String name) {
-        List<Supplier> suppliers = supplierRepository.findByNameLike("%" + name.toLowerCase() +"%");
+        List<Supplier> suppliers = supplierRepository.findBySupplierNameLike("%" + name.toLowerCase() +"%");
 
         return fromEntity(suppliers);
     }
@@ -43,24 +43,24 @@ public class SupplierService {
     }
 
     public SupplierGetDto modify(Long supplierId, SupplierPutDto supplierPutDto) {
-        Supplier customer = supplierRepository.findById(supplierId).orElse(null);
+        Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
         if (supplierId == null) {
             throw new RuntimeException("This supplier is not exist.");
         }
-        supplierMapper.copy(supplierPutDto, customer);
+        supplierMapper.copy(supplierPutDto, supplier);
 
-        customer.setId(supplierId);
+        supplier.setSupplierId(supplierId);
 
-        return supplierMapper.fromEntity(supplierRepository.save(customer));
+        return supplierMapper.fromEntity(supplierRepository.save(supplier));
     }
 
     public void delete(Long supplierId) {
         Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
 
-        //if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
-        //    supplierRepository.deleteById(supplierId);
-        //} else {
-        //    throw new RuntimeException("Can not delete supplier with related items.");
-        //}
+        if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
+            supplierRepository.deleteById(supplierId);
+        } else {
+            throw new RuntimeException("Can not delete supplier with related items.");
+        }
     }
 }

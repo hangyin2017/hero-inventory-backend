@@ -10,9 +10,9 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SupplierMapper {
-    Supplier toEntity(SupplierPostDto customerPostDto);
+    Supplier toEntity(SupplierPostDto supplierPostDto);
 
-    SupplierGetDto fromEntity(Supplier customer);
+    SupplierGetDto fromEntity(Supplier supplier);
 
-    void copy(SupplierPutDto customerPutDto, @MappingTarget Supplier customer);
+    void copy(SupplierPutDto supplierPutDto, @MappingTarget Supplier supplier);
 }

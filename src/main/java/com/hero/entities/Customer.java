@@ -18,11 +18,11 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customers_id")
-    private Long id;
+    @Column(name = "customer_id")
+    private Long customerId;
 
-    @Column(name = "customers_name")
-    private String name;
+    @Column(name = "customer_name")
+    private String customerName;
 
     @Column(name = "company_name")
     private String companyName;

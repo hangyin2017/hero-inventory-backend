@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -13,11 +14,11 @@ import java.util.Date;
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "suppliers_id")
-    private Long id;
+    @Column(name = "supplier_id")
+    private Long supplierId;
 
-    @Column(name = "suppliers_name")
-    private String name;
+    @Column(name = "supplier_name")
+    private String supplierName;
 
     @Column(name = "company_name")
     private String companyName;
@@ -52,7 +53,7 @@ public class Supplier {
     @Column(name = "comments")
     private String comments;
 
-    //@OneToMany(mappedBy = "supplier")
-    //private Set<PurchaseOrder> purchaseOrders;
+    @OneToMany(mappedBy = "supplier")
+    private Set<PurchaseOrder> purchaseOrders;
 
 }

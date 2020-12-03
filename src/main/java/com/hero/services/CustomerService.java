@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     public List<CustomerGetDto> findByName(String name) {
-        List<Customer> customers = customerRepository.findByNameLike("%" + name.toLowerCase() + "%");
+        List<Customer> customers = customerRepository.findByCustomerNameLike("%" + name.toLowerCase() + "%");
 
         return fromEntity(customers);
     }
@@ -49,7 +49,7 @@ public class CustomerService {
         }
         customerMapper.copy(customerPutDto, customer);
 
-        customer.setId(customerId);
+        customer.setCustomerId(customerId);
 
         return customerMapper.fromEntity(customerRepository.save(customer));
     }

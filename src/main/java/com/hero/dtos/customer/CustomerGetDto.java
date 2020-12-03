@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 public class CustomerGetDto {
-    private Long id;
+    private Long customerId;
     private String customerName;
     private String companyName;
     private String website;

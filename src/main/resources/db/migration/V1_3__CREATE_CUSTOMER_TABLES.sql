@@ -3,7 +3,6 @@ CREATE TABLE customers (
     customer_name VARCHAR(30),
     company_name VARCHAR(50),
     website VARCHAR(100),
-    contact_type VARCHAR(30),
     active BOOLEAN,
     salutation VARCHAR(30),
     first_name VARCHAR(30),

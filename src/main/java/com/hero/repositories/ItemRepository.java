@@ -23,8 +23,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 	
 	@Modifying
-	@Query("update Item set physical_stock=physical_stock- :quantity  where item_id= :id")
-	int updateItemStock(Long id, Long quantity);
+	@Query("update Item set physical_stock=physical_stock- :quantity where item_id= :id")
+	int decreaseItemStock(Long id, Long quantity);
 
+	@Modifying
+    @Query("update Item set physical_stock=physical_stock+ :quantity where item_id= :id")
+    int increaseItemStock(Long id, Long quantity);
 }
 
