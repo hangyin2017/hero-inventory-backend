@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SupplierPostDto {
-    private String name;
+    private String supplierName;
 }

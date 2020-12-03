@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SupplierPutDto {
-    private Long id;
-    private String name;
+    private Long supplierId;
+    private String supplierName;
 }

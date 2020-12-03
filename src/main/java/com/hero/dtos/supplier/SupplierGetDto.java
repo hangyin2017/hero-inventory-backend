@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 public class SupplierGetDto {
-    private Long id;
+    private Long supplierId;
     private String supplierName;
     private String companyName;
     private String website;
