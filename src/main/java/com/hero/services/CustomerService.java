@@ -25,7 +25,7 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public List<CustomerGetDto> getAllContacts() {
+    public List<CustomerGetDto> getAll() {
         return fromEntity(customerRepository.findAll());
     }
 
@@ -35,32 +35,32 @@ public class CustomerService {
         return fromEntity(customers);
     }
 
-    public CustomerGetDto postContact(CustomerPostDto customerPostDto) {
+    public CustomerGetDto addOne(CustomerPostDto customerPostDto) {
         Customer customer = customerMapper.toEntity(customerPostDto);
         Customer savedCustomer = customerRepository.save(customer);
 
         return customerMapper.fromEntity(savedCustomer);
     }
 
-    public CustomerGetDto modify(Long customerId, CustomerPutDto customerPutDto) {
-        Customer customer = customerRepository.findById(customerId).orElse(null);
+    public CustomerGetDto update(Long id, CustomerPutDto customerPutDto) {
+        Customer customer = customerRepository.findById(id).orElse(null);
         if (customer == null) {
-            throw new RuntimeException("This customer is not exist.");
+            throw new RuntimeException("This customer does not exist");
         }
         customerMapper.copy(customerPutDto, customer);
 
-        customer.setCustomerId(customerId);
+        customer.setCustomerId(id);
 
         return customerMapper.fromEntity(customerRepository.save(customer));
     }
 
-    public void delete(Long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElse(null);
+    public void delete(Long id) {
+        Customer customer = customerRepository.findById(id).orElse(null);
 
         if (customer.getSalesOrders() == null || customer.getSalesOrders().isEmpty()) {
-            customerRepository.deleteById(customerId);
+            customerRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Can not delete customer with related items.");
+            throw new RuntimeException("Can not delete customer with related order");
         }
     }
 }

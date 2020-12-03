@@ -33,12 +33,12 @@ public class PurchaseOrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<PurchaseOrderGetDto> getAllPurchaseOrders(){
+    public List<PurchaseOrderGetDto> getAll(){
         return fromEntity(purchaseOrderRepository.findAll());
     };
 
     @Transactional
-    public Map<String, Object> addPurchaseOrder(PurchaseOrderPostDto purchaseOrderPostDto) {
+    public Map<String, Object> addOne(PurchaseOrderPostDto purchaseOrderPostDto) {
 
         Map<String, Object> returnMap = new HashMap<>();
 
@@ -76,37 +76,34 @@ public class PurchaseOrderService {
         }
 
         return returnMap;
-
     }
 
     @Transactional
-    public PurchaseOrderGetDto modifyPurchaseOrder(Long purchaseorderId, PurchaseOrderPutDto purchaseOrderPutDto) {
-        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(purchaseorderId).orElse(null);
+    public PurchaseOrderGetDto update(Long id, PurchaseOrderPutDto purchaseOrderPutDto) {
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         purchasedItemRepository.deleteByPurchaseOrder(purchaseOrder);
         if (purchaseOrder == null) {
-            throw new RuntimeException("This purchaseorder is not exist.");
+            throw new RuntimeException("This purchaseorder does not exist.");
         }
         purchaseOrderMapper.copy(purchaseOrderPutDto, purchaseOrder);
         PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);
-        Set<PurchasedItem> purchasedItems = purchaseOrder.getPurchasedItems().stream().peek(e -> e.setPurchaseOrder(saved)).collect(Collectors.toSet());
+        Set<PurchasedItem> purchasedItems = purchaseOrder.getPurchasedItems().stream()
+                .peek(e -> e.setPurchaseOrder(saved)).collect(Collectors.toSet());
         purchasedItemRepository.saveAll(purchasedItems);
         purchaseOrder.setPurchasedItems(purchasedItems);
         return purchaseOrderMapper.fromEntity(purchaseOrder);
     }
 
     @Transactional
-    public void deletePurchaseOrder(Long purchaseOrderId) {
-        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(purchaseOrderId).orElse(null);
+    public void delete(Long id) {
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         if (purchaseOrder == null) {
-            throw new RuntimeException("This purchaseorder is not exist.");
+            throw new RuntimeException("This purchaseorder does not exist.");
         } else {
-            purchaseOrderRepository.deleteById(purchaseOrderId);
+            purchaseOrderRepository.deleteById(id);
             for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
                 purchasedItemRepository.delete(purchasedItem);
             }
         }
     }
-
-
-
 }

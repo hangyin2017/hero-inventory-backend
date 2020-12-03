@@ -18,25 +18,25 @@ public class BrandController {
     private final BrandService brandService;
 
     @GetMapping
-    public ResponseEntity<List<BrandGetDto>> getAllBrands() {
-        List<BrandGetDto> brandGetDtoList = brandService.getAllBrands();
+    public ResponseEntity<List<BrandGetDto>> getAll() {
+        List<BrandGetDto> brandGetDtoList = brandService.getAll();
         return ResponseEntity.ok(brandGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<BrandGetDto> addBrand(@RequestBody BrandPostDto brandPostDto) {
-        BrandGetDto brandGetDto = brandService.addBrand(brandPostDto);
+    public ResponseEntity<BrandGetDto> addOne(@RequestBody BrandPostDto brandPostDto) {
+        BrandGetDto brandGetDto = brandService.addOne(brandPostDto);
         return ResponseEntity.ok(brandGetDto);
     }
 
-    @PutMapping("/{brandId}")
-    public ResponseEntity<BrandGetDto> update(@PathVariable Long brandId, @RequestBody BrandPutDto brandPutDto) {
-        return ResponseEntity.ok(brandService.modify(brandId,brandPutDto));
+    @PutMapping("/{id}")
+    public ResponseEntity<BrandGetDto> update(@PathVariable Long id, @RequestBody BrandPutDto brandPutDto) {
+        return ResponseEntity.ok(brandService.modify(id,brandPutDto));
     }
 
-    @DeleteMapping("/{brandId}")
-    public ResponseEntity delete(@PathVariable Long brandId) {
-        brandService.delete(brandId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        brandService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

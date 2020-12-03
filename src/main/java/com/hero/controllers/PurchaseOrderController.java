@@ -20,25 +20,25 @@ public class PurchaseOrderController {
     private final PurchaseOrderService purchaseOrderService;
 
     @GetMapping
-    public ResponseEntity<List<PurchaseOrderGetDto>> getAllPurchaseOrders() {
-        List<PurchaseOrderGetDto> purchaseOrderGetDtoList = purchaseOrderService.getAllPurchaseOrders();
+    public ResponseEntity<List<PurchaseOrderGetDto>> getAll() {
+        List<PurchaseOrderGetDto> purchaseOrderGetDtoList = purchaseOrderService.getAll();
         return ResponseEntity.ok(purchaseOrderGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> addPurchaseOrder(@RequestBody PurchaseOrderPostDto purchaseOrderPostDto) {
-        Map<String, Object> purchaseOrderMap = purchaseOrderService.addPurchaseOrder(purchaseOrderPostDto);
+    public ResponseEntity<Map<String, Object>> addOne(@RequestBody PurchaseOrderPostDto purchaseOrderPostDto) {
+        Map<String, Object> purchaseOrderMap = purchaseOrderService.addOne(purchaseOrderPostDto);
         return ResponseEntity.ok(purchaseOrderMap);
     }
 
-    @PutMapping("/{purchaseorderId}")
-    public ResponseEntity<PurchaseOrderGetDto> update(@PathVariable Long purchaseorderId, @RequestBody PurchaseOrderPutDto purchaseOrderPutDto) {
-        return ResponseEntity.ok(purchaseOrderService.modifyPurchaseOrder(purchaseorderId, purchaseOrderPutDto));
+    @PutMapping("/{id}")
+    public ResponseEntity<PurchaseOrderGetDto> update(@PathVariable Long id, @RequestBody PurchaseOrderPutDto purchaseOrderPutDto) {
+        return ResponseEntity.ok(purchaseOrderService.update(id, purchaseOrderPutDto));
     }
 
-    @DeleteMapping("/{purchaseorderId}")
-    public ResponseEntity delete(@PathVariable Long purchaseorderId) {
-        purchaseOrderService.deletePurchaseOrder(purchaseorderId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        purchaseOrderService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

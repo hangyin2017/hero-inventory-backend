@@ -17,25 +17,25 @@ public class CustomerController {
     public final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<List<CustomerGetDto>> getAllCustomers() {
-        List<CustomerGetDto> customerGetDtoList = customerService.getAllContacts();
+    public ResponseEntity<List<CustomerGetDto>> getAll() {
+        List<CustomerGetDto> customerGetDtoList = customerService.getAll();
         return ResponseEntity.ok(customerGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<CustomerGetDto> postCustomers(@RequestBody CustomerPostDto customerPostDto) {
-        return ResponseEntity.ok(customerService.postContact(customerPostDto));
+    public ResponseEntity<CustomerGetDto> addOne(@RequestBody CustomerPostDto customerPostDto) {
+        return ResponseEntity.ok(customerService.addOne(customerPostDto));
     }
 
-    @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerGetDto> update(@PathVariable Long customerId, @RequestBody CustomerPutDto customerPutDto) {
-        CustomerGetDto customerGetDto = customerService.modify(customerId, customerPutDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> update(@PathVariable Long id, @RequestBody CustomerPutDto customerPutDto) {
+        CustomerGetDto customerGetDto = customerService.update(id, customerPutDto);
         return ResponseEntity.ok(customerGetDto);
     }
 
-    @DeleteMapping("/{customerId}")
-    public ResponseEntity deleteCustomers(@PathVariable Long customerId) {
-        customerService.delete(customerId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        customerService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

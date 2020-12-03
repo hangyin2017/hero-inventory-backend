@@ -25,7 +25,7 @@ public class SupplierService {
                 .collect(Collectors.toList());
     }
 
-    public List<SupplierGetDto> getAllSuppliers() {
+    public List<SupplierGetDto> getAll() {
         return fromEntity(supplierRepository.findAll());
     }
 
@@ -35,32 +35,32 @@ public class SupplierService {
         return fromEntity(suppliers);
     }
 
-    public SupplierGetDto postSupplier(SupplierPostDto supplierPostDto) {
+    public SupplierGetDto addOne(SupplierPostDto supplierPostDto) {
         Supplier supplier = supplierMapper.toEntity(supplierPostDto);
         Supplier savedSupplier = supplierRepository.save(supplier);
 
         return supplierMapper.fromEntity(savedSupplier);
     }
 
-    public SupplierGetDto modify(Long supplierId, SupplierPutDto supplierPutDto) {
-        Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
-        if (supplierId == null) {
-            throw new RuntimeException("This supplier is not exist.");
+    public SupplierGetDto update(Long id, SupplierPutDto supplierPutDto) {
+        Supplier supplier = supplierRepository.findById(id).orElse(null);
+        if (id == null) {
+            throw new RuntimeException("This supplier does not exist");
         }
         supplierMapper.copy(supplierPutDto, supplier);
 
-        supplier.setSupplierId(supplierId);
+        supplier.setSupplierId(id);
 
         return supplierMapper.fromEntity(supplierRepository.save(supplier));
     }
 
-    public void delete(Long supplierId) {
-        Supplier supplier = supplierRepository.findById(supplierId).orElse(null);
+    public void delete(Long id) {
+        Supplier supplier = supplierRepository.findById(id).orElse(null);
 
         if (supplier.getPurchaseOrders() == null || supplier.getPurchaseOrders().isEmpty()) {
-            supplierRepository.deleteById(supplierId);
+            supplierRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Can not delete supplier with related items.");
+            throw new RuntimeException("Can not delete supplier with related order");
         }
     }
 }

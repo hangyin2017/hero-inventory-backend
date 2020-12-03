@@ -17,25 +17,25 @@ public class SupplierController {
     public final SupplierService supplierService;
 
     @GetMapping
-    public ResponseEntity<List<SupplierGetDto>> getAllSuppliers() {
-        List<SupplierGetDto> supplierGetDtoList = supplierService.getAllSuppliers();
+    public ResponseEntity<List<SupplierGetDto>> getAll() {
+        List<SupplierGetDto> supplierGetDtoList = supplierService.getAll();
         return ResponseEntity.ok(supplierGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<SupplierGetDto> postSuppliers(@RequestBody SupplierPostDto supplierPostDto) {
-        return ResponseEntity.ok(supplierService.postSupplier(supplierPostDto));
+    public ResponseEntity<SupplierGetDto> addOne(@RequestBody SupplierPostDto supplierPostDto) {
+        return ResponseEntity.ok(supplierService.addOne(supplierPostDto));
     }
 
-    @PutMapping("/{supplierId}")
-    public ResponseEntity<SupplierGetDto> modifySuppliers(@PathVariable Long supplierId, @RequestBody SupplierPutDto supplierPutDto) {
-        SupplierGetDto supplierGetDto = supplierService.modify(supplierId, supplierPutDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<SupplierGetDto> update(@PathVariable Long id, @RequestBody SupplierPutDto supplierPutDto) {
+        SupplierGetDto supplierGetDto = supplierService.update(id, supplierPutDto);
         return ResponseEntity.ok(supplierGetDto);
     }
 
-    @DeleteMapping("/{supplierId}")
-    public ResponseEntity deleteSuppliers(@PathVariable Long supplierId) {
-        supplierService.delete(supplierId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        supplierService.delete(id);
         return ResponseEntity.ok().build();
     }
 }

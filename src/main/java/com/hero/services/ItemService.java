@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +29,11 @@ public class ItemService {
 
     private List<ItemGetDto> itemsToItemGetDtos(List<Item> items) {
         return items.stream()
-                .map(item -> itemMapper.itemToItemGetDto(item))
+                .map(item -> itemMapper.fromEntity(item))
                 .collect(Collectors.toList());
     }
 
-    public List<ItemGetDto> getAllItems() {
+    public List<ItemGetDto> getAll() {
         return itemsToItemGetDtos(itemRepository.findAll());
     }
 

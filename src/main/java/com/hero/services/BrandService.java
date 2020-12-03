@@ -25,11 +25,11 @@ public class BrandService {
                 .collect(Collectors.toList());
     }
 
-    public List<BrandGetDto> getAllBrands() {
+    public List<BrandGetDto> getAll() {
         return fromEntity(brandRepository.findAll());
     }
 
-    public BrandGetDto addBrand(BrandPostDto brandPostDto) {
+    public BrandGetDto addOne(BrandPostDto brandPostDto) {
         Brand brand = brandMapper.toEntity(brandPostDto);
 
         Brand savedBrand = brandRepository.save(brand);

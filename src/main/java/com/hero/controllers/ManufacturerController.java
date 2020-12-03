@@ -20,25 +20,26 @@ public class ManufacturerController {
     public final ManufacturerService manufacturerService;
 
     @GetMapping
-    public ResponseEntity<List<ManufacturerGetDto>> getAllManufacturers() {
-        List<ManufacturerGetDto> manufacturerGetDtoList = manufacturerService.getAllManufacturers();
+    public ResponseEntity<List<ManufacturerGetDto>> getAll() {
+        List<ManufacturerGetDto> manufacturerGetDtoList = manufacturerService.getAll();
         return ResponseEntity.ok(manufacturerGetDtoList);
     }
 
     @PostMapping
-    public ResponseEntity<ManufacturerGetDto> postManufacturers(@RequestBody ManufacturerPostDto manufacturerPostDto) {
-        return ResponseEntity.ok(manufacturerService.postManufacturer(manufacturerPostDto));
+    public ResponseEntity<ManufacturerGetDto> addOne(@RequestBody ManufacturerPostDto manufacturerPostDto) {
+        return ResponseEntity.ok(manufacturerService.addOne(manufacturerPostDto));
     }
 
-    @PutMapping("/{manufacturerId}")
-    public ResponseEntity<ManufacturerGetDto> modifyManufacturers(@PathVariable Long manufacturerId, @RequestBody ManufacturerPutDto manufacturerPutDto) {
-        ManufacturerGetDto manufacturerGetDto = manufacturerService.modifyManufacturer(manufacturerId, manufacturerPutDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<ManufacturerGetDto> update(@PathVariable Long id,
+                                                     @RequestBody ManufacturerPutDto manufacturerPutDto) {
+        ManufacturerGetDto manufacturerGetDto = manufacturerService.update(id, manufacturerPutDto);
         return ResponseEntity.ok(manufacturerGetDto);
     }
 
-    @DeleteMapping("/{manufacturerId}")
-    public ResponseEntity deleteManufacturer(@PathVariable Long manufacturerId) {
-        manufacturerService.deleteManufacturer(manufacturerId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        manufacturerService.delete(id);
         return ResponseEntity.ok().build();
     }
 

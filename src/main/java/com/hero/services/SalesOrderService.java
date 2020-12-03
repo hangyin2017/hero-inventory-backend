@@ -35,12 +35,12 @@ public class SalesOrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<SalesOrderGetDto> getAllSalesOrders() {
+    public List<SalesOrderGetDto> getAll() {
         return fromEntity(salesOrderRepository.findAll());
     }
 
     @Transactional
-    public Map<String, Object> addSalesOrder(SalesOrderPostDto salesOrderPostDto) {
+    public Map<String, Object> addOne(SalesOrderPostDto salesOrderPostDto) {
 
         Map<String, Object> returnMap = new HashMap<>();
 
@@ -88,25 +88,26 @@ public class SalesOrderService {
     }
 
     @Transactional
-    public SalesOrderGetDto modifySalesOrder(Long salesorderId, SalesOrderPutDto salesOrderPutDto) {
+    public SalesOrderGetDto update(Long salesorderId, SalesOrderPutDto salesOrderPutDto) {
         SalesOrder salesOrder = salesOrderRepository.findById(salesorderId).orElse(null);
         soldItemRepository.deleteBySalesOrder(salesOrder);
         if (salesOrder == null) {
-            throw new RuntimeException("This salesorder is not exist.");
+            throw new RuntimeException("This salesorder does not exist.");
         }
         salesOrderMapper.copy(salesOrderPutDto, salesOrder);
         SalesOrder saved = salesOrderRepository.save(salesOrder);
-        Set<SoldItem> soldItems = salesOrder.getSoldItems().stream().peek(e -> e.setSalesOrder(saved)).collect(Collectors.toSet());
+        Set<SoldItem> soldItems = salesOrder.getSoldItems().stream()
+                .peek(e -> e.setSalesOrder(saved)).collect(Collectors.toSet());
         soldItemRepository.saveAll(soldItems);
         salesOrder.setSoldItems(soldItems);
         return salesOrderMapper.fromEntity(salesOrder);
     }
 
     @Transactional
-    public void deleteSalesOrder(Long salesOrderId) {
+    public void delete(Long salesOrderId) {
         SalesOrder salesOrder = salesOrderRepository.findById(salesOrderId).orElse(null);
         if (salesOrder == null) {
-            throw new RuntimeException("This salesorder is not exist.");
+            throw new RuntimeException("This salesorder does not exist.");
         } else {
             salesOrderRepository.deleteById(salesOrderId);
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
