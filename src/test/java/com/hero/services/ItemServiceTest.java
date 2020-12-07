@@ -4,7 +4,9 @@ import com.hero.dtos.item.ItemGetDto;
 import com.hero.entities.Item;
 import com.hero.mappers.ItemMapper;
 import com.hero.mappers.ItemMapperImpl;
+import com.hero.repositories.BrandRepository;
 import com.hero.repositories.ItemRepository;
+import com.hero.utils.Utility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,26 +27,38 @@ public class ItemServiceTest {
     @Mock
     private ItemRepository itemRepository;
 
+    @Mock
+    private BrandRepository brandRepository;
+
     @Autowired
     private ItemMapper itemMapper;
+
+    @Autowired
+    private Utility utility;
 
     private ItemService itemService;
 
     @BeforeEach
     void setup() { itemService = new ItemService(itemRepository, itemMapper); }
 
-    *//*@Test
+    @Test
     public void shouldReturnItemGetDtoListGivenItemsExist() {
+        // Given
         Item item1 = new Item();
-        item1.setCode("111");
-        item1.setName("Beauty1");
+        item1.setSku("111");
+        item1.setName("Health1");
+        Item item2 = utility.buildItem((long) 2,
+                "sku2",
+                "Health2",
+                true);
 
-        when(itemRepository.findAll()).thenReturn(List.of(item1));
+        // When
+        when(itemRepository.findAll()).thenReturn(List.of(item1, item2));
+        List<ItemGetDto> returnedItemGetDtoList = itemService.getAll();
 
-        List<ItemGetDto> returnedItemGetDtoList = itemService.getAllItems();
-
+        // Then
         assertNotNull(returnedItemGetDtoList);
-        assertEquals(1, returnedItemGetDtoList.size());
+        assertEquals(2, returnedItemGetDtoList.size());
+        assertEquals("Health2", returnedItemGetDtoList.get(1).getName());
     }
-*//*
 }*/

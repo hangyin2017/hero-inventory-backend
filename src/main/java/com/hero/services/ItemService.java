@@ -20,10 +20,8 @@ public class ItemService {
     private final ItemMapper itemMapper;
 
     private Item findItem(Long id) {
-        Item item = itemRepository.findById(id).orElse(null);
-
-        if (item == null) { throw new RuntimeException("Item id=" + id + " does not exist."); }
-
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Item id=" + id + " does not exist"));
         return item;
     }
 

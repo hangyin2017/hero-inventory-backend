@@ -15,7 +15,7 @@ ext {
 //	flywayVersion = '6.5.7'
 //	mapstructVersion = '1.4.0.Beta1'
 	jjwtVersion = '0.11.2'
-//	mockitoVersion = '3.5.15'
+	mockitoVersion = '3.5.15'
 }
 
 group = 'com.hero'
@@ -56,6 +56,8 @@ dependencies {
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 
 	testImplementation "org.springframework.security:spring-security-test"
+	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+	testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

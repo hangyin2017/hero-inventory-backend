@@ -25,6 +25,12 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(purchaseOrderGetDtoList);
     }
 
+    @GetMapping
+    public ResponseEntity<PurchaseOrderGetDto> getOne(@PathVariable Long id) {
+        PurchaseOrderGetDto purchaseOrderGetDto = purchaseOrderService.getOne(id);
+        return ResponseEntity.ok(purchaseOrderGetDto);
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, Object>> addOne(@RequestBody PurchaseOrderPostDto purchaseOrderPostDto) {
         Map<String, Object> purchaseOrderMap = purchaseOrderService.addOne(purchaseOrderPostDto);
@@ -37,8 +43,13 @@ public class PurchaseOrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         purchaseOrderService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> confirm(@PathVariable Long id) {
+        return ResponseEntity.ok(purchaseOrderService.confirm(id));
     }
 }

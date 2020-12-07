@@ -27,20 +27,36 @@ public class PurchaseOrderService {
 
     private final ItemRepository itemRepository;
 
-    private List<PurchaseOrderGetDto> fromEntity(List<PurchaseOrder> purchaseOrders) {
+    private PurchaseOrder findOneById(Long id) {
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order id=" + id + " does not exist"));
+        return purchaseOrder;
+    }
+
+    private List<PurchaseOrderGetDto> fromEntityList(List<PurchaseOrder> purchaseOrders) {
         return purchaseOrders.stream()
                 .map(purchaseOrder -> purchaseOrderMapper.fromEntity(purchaseOrder))
                 .collect(Collectors.toList());
     }
 
     public List<PurchaseOrderGetDto> getAll(){
-        return fromEntity(purchaseOrderRepository.findAll());
+        return fromEntityList(purchaseOrderRepository.findAll());
     };
+
+    public PurchaseOrderGetDto getOne(Long id) {
+        return purchaseOrderMapper.fromEntity(findOneById(id));
+    }
 
     @Transactional
     public Map<String, Object> addOne(PurchaseOrderPostDto purchaseOrderPostDto) {
 
         Map<String, Object> returnMap = new HashMap<>();
+
+        if (!purchaseOrderPostDto.getStatus().equals("draft")) {
+            returnMap.put("code", 501);
+            returnMap.put("msg", "Order's status must be draft");
+            return returnMap;
+        }
 
         PurchaseOrder purchaseOrder = purchaseOrderMapper.toEntity(purchaseOrderPostDto);
 
@@ -105,5 +121,23 @@ public class PurchaseOrderService {
                 purchasedItemRepository.delete(purchasedItem);
             }
         }
+    }
+
+    @Transactional
+    public Map<String, Object> confirm(Long id) {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        PurchaseOrder purchaseOrder = findOneById(id);
+
+        if (!purchaseOrder.getStatus().equals("draft")) {
+            returnMap.put("code", 501);
+            returnMap.put("msg", "Order's status must be draft");
+            return returnMap;
+        }
+
+        purchaseOrder.setStatus("confirmed");
+        returnMap.put("code", 200);
+        returnMap.put("data", purchaseOrderMapper.fromEntity(purchaseOrder));
+        return returnMap;
     }
 }
