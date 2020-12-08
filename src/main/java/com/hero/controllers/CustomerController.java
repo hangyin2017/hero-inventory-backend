@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/v1/customers")
 @RequiredArgsConstructor
 public class CustomerController {
@@ -20,6 +21,12 @@ public class CustomerController {
     public ResponseEntity<List<CustomerGetDto>> getAll() {
         List<CustomerGetDto> customerGetDtoList = customerService.getAll();
         return ResponseEntity.ok(customerGetDtoList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> getOne(@PathVariable Long id) {
+        CustomerGetDto customerGetDto = customerService.getOne(id);
+        return ResponseEntity.ok(customerGetDto);
     }
 
     @PostMapping
