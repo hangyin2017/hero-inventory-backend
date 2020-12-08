@@ -111,14 +111,24 @@ public class PurchaseOrderService {
     @Transactional
     public void delete(Long id) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
-        if (purchaseOrder == null) {
-            throw new RuntimeException("This purchaseorder does not exist");
-        } else {
-            purchaseOrderRepository.deleteById(id);
-            for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
-                purchasedItemRepository.delete(purchasedItem);
+
+        if (purchaseOrder == null) { throw new RuntimeException("This purchaseorder does not exist"); }
+
+        String status = purchaseOrder.getStatus();
+        if ("closed".equals(status)) { throw new RuntimeException("Cannot delete closed order"); }
+
+        purchaseOrder.getPurchasedItems().forEach((purchasedItem) -> {
+            Long itemId = purchasedItem.getItemId();
+            Integer quantity = purchasedItem.getQuantity();
+
+            if ("confirmed".equals(status)) {
+                itemRepository.decreaseArrivingQuantity(itemId, quantity);
             }
-        }
+
+            purchasedItemRepository.delete(purchasedItem);
+        });
+
+        purchaseOrderRepository.deleteById(id);
     }
 
     @Transactional
@@ -164,7 +174,7 @@ public class PurchaseOrderService {
             itemRepository.increasePhysicalStock(itemId, quantity);
         });
 
-        purchaseOrder.setStatus("received");
+        purchaseOrder.setStatus("closed");
         PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);
 
         returnMap.put("code", 200);

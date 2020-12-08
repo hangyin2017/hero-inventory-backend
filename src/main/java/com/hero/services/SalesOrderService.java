@@ -91,16 +91,25 @@ public class SalesOrderService {
     }
 
     @Transactional
-    public void delete(Long salesOrderId) {
-        SalesOrder salesOrder = salesOrderRepository.findById(salesOrderId).orElse(null);
-        if (salesOrder == null) {
-            throw new RuntimeException("This salesorder does not exist");
-        } else {
-            salesOrderRepository.deleteById(salesOrderId);
-            for (SoldItem soldItem : salesOrder.getSoldItems()) {
-                soldItemRepository.delete(soldItem);
+    public void delete(Long id) {
+        SalesOrder salesOrder = salesOrderRepository.findById(id).orElse(null);
+        if (salesOrder == null) { throw new RuntimeException("This salesorder does not exist"); }
+
+        String status = salesOrder.getStatus();
+        if ("closed".equals(status)) { throw new RuntimeException("Cannot delete closed order"); }
+
+        salesOrder.getSoldItems().forEach((soldItem) -> {
+            Long itemId = soldItem.getItemId();
+            Integer quantity = soldItem.getQuantity();
+
+            if ("confirmed".equals(status)) {
+                itemRepository.decreaseLockedStock(itemId, quantity);
             }
-        }
+
+            soldItemRepository.delete(soldItem);
+        });
+
+        salesOrderRepository.deleteById(id);
     }
 
     @Transactional
@@ -188,7 +197,7 @@ public class SalesOrderService {
                 itemRepository.decreaseLockedStock(itemId, quantity);
                 itemRepository.decreasePhysicalStock(itemId, quantity);
             });
-            salesOrder.setStatus("sent");
+            salesOrder.setStatus("closed");
             SalesOrder saved = salesOrderRepository.save(salesOrder);
 
             returnMap.put("code", 200);
