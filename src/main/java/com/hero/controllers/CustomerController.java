@@ -22,6 +22,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerGetDtoList);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerGetDto> getOne(@PathVariable Long id) {
+        CustomerGetDto customerGetDto = customerService.getOne(id);
+        return ResponseEntity.ok(customerGetDto);
+    }
+
     @PostMapping
     public ResponseEntity<CustomerGetDto> addOne(@RequestBody CustomerPostDto customerPostDto) {
         return ResponseEntity.ok(customerService.addOne(customerPostDto));
