@@ -19,6 +19,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
+
     private List<CustomerGetDto> fromEntity(List<Customer> customers) {
         return customers.stream()
                 .map(customer -> customerMapper.fromEntity(customer))
@@ -33,6 +34,12 @@ public class CustomerService {
         List<Customer> customers = customerRepository.findByCustomerNameLike("%" + name.toLowerCase() + "%");
 
         return fromEntity(customers);
+    }
+
+    public CustomerGetDto getOne(Long id) {
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer == null) { throw new RuntimeException("Customer id=" + id + " does not exist."); }
+        return customerMapper.fromEntity(customer);
     }
 
     public CustomerGetDto addOne(CustomerPostDto customerPostDto) {
