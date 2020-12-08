@@ -28,6 +28,11 @@ public class SalesOrderService {
 
     private final ItemRepository itemRepository;
 
+    private SalesOrder findOneById(Long id) {
+        SalesOrder salesOrder = salesOrderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order id=" + id + " does not exist"));
+        return salesOrder;
+    }
 
     private List<SalesOrderGetDto> fromEntity(List<SalesOrder> salesOrders) {
         return salesOrders.stream()
@@ -39,6 +44,10 @@ public class SalesOrderService {
         return fromEntity(salesOrderRepository.findAll());
     }
 
+    public SalesOrderGetDto getOne(Long id) {
+        return salesOrderMapper.fromEntity(findOneById(id));
+    }
+
     @Transactional
     public Map<String, Object> addOne(SalesOrderPostDto salesOrderPostDto) {
 
@@ -46,44 +55,16 @@ public class SalesOrderService {
 
         SalesOrder salesOrder = salesOrderMapper.toEntity(salesOrderPostDto);
 
-        List<Item> itemIdList = new ArrayList<Item>();
+        salesOrder.setStatus("draft");
+        SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
+
         for (SoldItem soldItem : salesOrder.getSoldItems()) {
-
-            Long id = soldItem.getItemId();
-            Long quantity = soldItem.getQuantity();
-
-            Item item = itemRepository.findById(id).orElse(null);
-            if (item.getPhysicalStock() < quantity) {
-                itemIdList.add(item);
-            }
+            soldItem.setSalesOrder(savedOrder);
+            soldItemRepository.save(soldItem);
         }
 
-        if (itemIdList.size() == 0) {
-            salesOrder.setStatus("draft");
-            SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
-
-            for (SoldItem soldItem : salesOrder.getSoldItems()) {
-                soldItem.setSalesOrder(savedOrder);
-                soldItemRepository.save(soldItem);
-                itemRepository.decreasePhysicalStock(soldItem.getItemId(), soldItem.getQuantity());
-            }
-            returnMap.put("code", 200);
-            returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));
-        } else {
-            StringBuffer msg = new StringBuffer();
-
-            msg.append("Current stock of ");
-            for (int i = 0; i < itemIdList.size(); i++) {
-                msg.append("item ");
-                msg.append(itemIdList.get(i).getId());
-                msg.append(" is ");
-                msg.append(itemIdList.get(i).getPhysicalStock());
-                msg.append(", ");
-            }
-            msg.append("please delete this item or change the number of quantity");
-            returnMap.put("code", 501);
-            returnMap.put("msg", msg);
-        }
+        returnMap.put("code", 200);
+        returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));
 
         return returnMap;
     }
@@ -93,8 +74,13 @@ public class SalesOrderService {
         SalesOrder salesOrder = salesOrderRepository.findById(salesorderId).orElse(null);
         soldItemRepository.deleteBySalesOrder(salesOrder);
         if (salesOrder == null) {
-            throw new RuntimeException("This salesorder does not exist.");
+            throw new RuntimeException("This salesorder does not exist");
         }
+
+        if (!"draft".equals(salesOrder.getStatus())) {
+            throw new RuntimeException("Only draft orders are editable");
+        }
+
         salesOrderMapper.copy(salesOrderPutDto, salesOrder);
         SalesOrder saved = salesOrderRepository.save(salesOrder);
         Set<SoldItem> soldItems = salesOrder.getSoldItems().stream()
@@ -108,12 +94,121 @@ public class SalesOrderService {
     public void delete(Long salesOrderId) {
         SalesOrder salesOrder = salesOrderRepository.findById(salesOrderId).orElse(null);
         if (salesOrder == null) {
-            throw new RuntimeException("This salesorder does not exist.");
+            throw new RuntimeException("This salesorder does not exist");
         } else {
             salesOrderRepository.deleteById(salesOrderId);
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
                 soldItemRepository.delete(soldItem);
             }
         }
+    }
+
+    @Transactional
+    public Map<String, Object> confirm(Long id) {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        SalesOrder salesOrder = findOneById(id);
+
+        if (!salesOrder.getStatus().equals("draft")) {
+            returnMap.put("code", 501);
+            returnMap.put("msg", "Order's status must be draft");
+            return returnMap;
+        }
+
+        List<Item> itemIdList = new ArrayList<Item>();
+        salesOrder.getSoldItems().forEach((soldItem) -> {
+            Long itemId = soldItem.getItemId();
+            Integer quantity = soldItem.getQuantity();
+            Item item = itemRepository.findById(itemId).orElse(null);
+            Integer physicalStock = item.getPhysicalStock();
+            Integer lockedStock = item.getLockedStock();
+            Integer arrivingQuantity = item.getArrivingQuantity();
+
+            if (quantity > physicalStock + arrivingQuantity - lockedStock) {
+                itemIdList.add(item);
+            }
+        });
+
+        if (itemIdList.size() == 0) {
+            salesOrder.getSoldItems().forEach((salesdItem) -> {
+                itemRepository.increaseLockedStock(salesdItem.getItemId(), salesdItem.getQuantity());
+            });
+            salesOrder.setStatus("confirmed");
+            SalesOrder saved = salesOrderRepository.save(salesOrder);
+
+            returnMap.put("code", 200);
+            returnMap.put("data", salesOrderMapper.fromEntity(saved));
+        } else {
+            StringBuffer msg = new StringBuffer();
+
+            msg.append("No enough items in stock.");
+            msg.append("Current available stock of ");
+            for (Item item : itemIdList) {
+                msg.append("item ");
+                msg.append(item.getId());
+                msg.append(" is ");
+                msg.append(item.getPhysicalStock() + item.getArrivingQuantity() - item.getLockedStock());
+                msg.append(", ");
+            }
+            returnMap.put("code", 501);
+            returnMap.put("msg", msg);
+        }
+
+        return returnMap;
+    }
+
+    @Transactional
+    public Map<String, Object> send(Long id) {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        SalesOrder salesOrder = findOneById(id);
+
+        if (!salesOrder.getStatus().equals("confirmed")) {
+            returnMap.put("code", 501);
+            returnMap.put("msg", "Order's status must be confirmed");
+            return returnMap;
+        }
+
+        List<Item> itemIdList = new ArrayList<Item>();
+        salesOrder.getSoldItems().forEach((soldItem) -> {
+            Long itemId = soldItem.getItemId();
+            Integer quantity = soldItem.getQuantity();
+            Item item = itemRepository.findById(itemId).orElse(null);
+            Integer physicalStock = item.getPhysicalStock();
+
+            if (quantity > physicalStock) {
+                itemIdList.add(item);
+            }
+        });
+
+        if (itemIdList.size() == 0) {
+            salesOrder.getSoldItems().forEach((soldItem) -> {
+                Long itemId = soldItem.getItemId();
+                Integer quantity = soldItem.getQuantity();
+                itemRepository.decreaseLockedStock(itemId, quantity);
+                itemRepository.decreasePhysicalStock(itemId, quantity);
+            });
+            salesOrder.setStatus("sent");
+            SalesOrder saved = salesOrderRepository.save(salesOrder);
+
+            returnMap.put("code", 200);
+            returnMap.put("data", salesOrderMapper.fromEntity(saved));
+        } else {
+            StringBuffer msg = new StringBuffer();
+
+            msg.append("No enough items in stock.");
+            msg.append("Current stock of ");
+            for (Item item : itemIdList) {
+                msg.append("item ");
+                msg.append(item.getId());
+                msg.append(" is ");
+                msg.append(item.getPhysicalStock());
+                msg.append(", ");
+            }
+            returnMap.put("code", 501);
+            returnMap.put("msg", msg);
+        }
+
+        return returnMap;
     }
 }

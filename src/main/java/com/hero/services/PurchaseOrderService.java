@@ -58,7 +58,7 @@ public class PurchaseOrderService {
         for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
 
             Long id = purchasedItem.getItemId();
-            Long quantity = purchasedItem.getQuantity();
+            Integer quantity = purchasedItem.getQuantity();
 
             Item item = itemRepository.findById(id).orElse(null);
             if (quantity > 0) {
@@ -73,15 +73,13 @@ public class PurchaseOrderService {
             for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
                 purchasedItem.setPurchaseOrder(savedOrder);
                 purchasedItemRepository.save(purchasedItem);
-                //itemRepository.increasePhysicalStock(purchasedItem.getItemId(), purchasedItem.getQuantity());
             }
             returnMap.put("code", 200);
             returnMap.put("data", purchaseOrderMapper.fromEntity(savedOrder));
         } else {
             StringBuffer msg = new StringBuffer();
 
-            msg.append("You can not create a purchase order without an item, ");
-            msg.append("please add an item!");
+            msg.append("Can not create a purchase order without any item");
             returnMap.put("code", 501);
             returnMap.put("msg", msg);
         }
@@ -161,7 +159,7 @@ public class PurchaseOrderService {
 
         purchaseOrder.getPurchasedItems().forEach((purchasedItem) -> {
             Long itemId = purchasedItem.getItemId();
-            Long quantity = purchasedItem.getQuantity();
+            Integer quantity = purchasedItem.getQuantity();
             itemRepository.decreaseArrivingQuantity(itemId, quantity);
             itemRepository.increasePhysicalStock(itemId, quantity);
         });

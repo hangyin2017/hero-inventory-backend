@@ -26,7 +26,7 @@ public class SoldItem {
     private SalesOrder salesOrder;
 
     @Column(name = "quantity")
-    private Long quantity;
+    private Integer quantity;
 
     @Column(name = "rate")
     private BigDecimal rate;

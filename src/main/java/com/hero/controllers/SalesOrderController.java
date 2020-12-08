@@ -23,6 +23,12 @@ public class SalesOrderController {
         return ResponseEntity.ok(salesOrderGetDtoList);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SalesOrderGetDto> getOne(@PathVariable Long id) {
+        SalesOrderGetDto salesOrderGetDto = salesOrderService.getOne(id);
+        return ResponseEntity.ok(salesOrderGetDto);
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, Object>> addOne(@RequestBody SalesOrderPostDto salesOrderPostDto) {
         Map<String, Object> salesOrderMap= salesOrderService.addOne(salesOrderPostDto);
@@ -38,5 +44,15 @@ public class SalesOrderController {
     public ResponseEntity delete(@PathVariable Long id) {
         salesOrderService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/confirm")
+    public ResponseEntity<Map<String, Object>> confirm(@PathVariable Long id) {
+        return ResponseEntity.ok(salesOrderService.confirm(id));
+    }
+
+    @GetMapping("/{id}/send")
+    public ResponseEntity<Map<String, Object>> send(@PathVariable Long id) {
+        return ResponseEntity.ok(salesOrderService.send(id));
     }
 }
