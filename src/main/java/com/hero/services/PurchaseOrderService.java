@@ -52,12 +52,6 @@ public class PurchaseOrderService {
 
         Map<String, Object> returnMap = new HashMap<>();
 
-        if (!purchaseOrderPostDto.getStatus().equals("draft")) {
-            returnMap.put("code", 501);
-            returnMap.put("msg", "Order's status must be draft");
-            return returnMap;
-        }
-
         PurchaseOrder purchaseOrder = purchaseOrderMapper.toEntity(purchaseOrderPostDto);
 
         List<Item> itemIdList = new ArrayList<Item>();
@@ -73,6 +67,7 @@ public class PurchaseOrderService {
         }
 
         if (itemIdList.size() > 0) {
+            purchaseOrder.setStatus("draft");
             PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
 
             for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {

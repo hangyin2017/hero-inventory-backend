@@ -25,7 +25,7 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(purchaseOrderGetDtoList);
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<PurchaseOrderGetDto> getOne(@PathVariable Long id) {
         PurchaseOrderGetDto purchaseOrderGetDto = purchaseOrderService.getOne(id);
         return ResponseEntity.ok(purchaseOrderGetDto);
@@ -48,7 +48,7 @@ public class PurchaseOrderController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/{id}/confirm")
     public ResponseEntity<Map<String, Object>> confirm(@PathVariable Long id) {
         return ResponseEntity.ok(purchaseOrderService.confirm(id));
     }

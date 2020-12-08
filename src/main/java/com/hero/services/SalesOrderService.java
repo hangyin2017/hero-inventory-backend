@@ -59,6 +59,7 @@ public class SalesOrderService {
         }
 
         if (itemIdList.size() == 0) {
+            salesOrder.setStatus("draft");
             SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
 
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
