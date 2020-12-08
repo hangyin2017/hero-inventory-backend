@@ -1,4 +1,4 @@
-INSERT INTO items (sku, upc, name, description, active, category, brand_id, manufacturer_id, selling_price, cost_price, apply_gst, length, width, height, weight, unit, units_per_carton, units_per_pallet, created_time, last_modified_time, physical_stock, locked_stock, next_arrival)
+INSERT INTO items (sku, upc, name, description, active, category, brand_id, manufacturer_id, selling_price, cost_price, apply_gst, length, width, height, weight, unit, units_per_carton, units_per_pallet, created_time, last_modified_time, physical_stock, locked_stock, arriving_quantity)
 VALUES
 ('BXARRA002',null,'Collagen Beauty Essential + Milk Thistle','��ԭ�������ݾ���+�̼���  14֧/��','TRUE','health supplement','2','2','98.0','8.5','TRUE',null,null,null,'0.0',null,'1','1','2020/9/11 9:58','2020/9/11 9:58','0','0','0'),
 ('BXARRA001',null,'Collagen Beauty Essential + Prebiotics','��ԭ�������ݾ���+����Ԫ  14֧/��','TRUE','health supplement','2','2','98.0','8.5','TRUE',null,null,null,'0.0',null,'1','1','2020/9/11 9:35','2020/9/11 9:35','0','0','0'),

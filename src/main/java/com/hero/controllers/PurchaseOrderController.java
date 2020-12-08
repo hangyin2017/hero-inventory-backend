@@ -52,4 +52,9 @@ public class PurchaseOrderController {
     public ResponseEntity<Map<String, Object>> confirm(@PathVariable Long id) {
         return ResponseEntity.ok(purchaseOrderService.confirm(id));
     }
+
+    @GetMapping("/{id}/receive")
+    public ResponseEntity<Map<String, Object>> receive(@PathVariable Long id) {
+        return ResponseEntity.ok(purchaseOrderService.receive(id));
+    }
 }

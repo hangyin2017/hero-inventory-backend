@@ -73,7 +73,7 @@ public class PurchaseOrderService {
             for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
                 purchasedItem.setPurchaseOrder(savedOrder);
                 purchasedItemRepository.save(purchasedItem);
-                itemRepository.increaseItemStock(purchasedItem.getItemId(), purchasedItem.getQuantity());
+                //itemRepository.increasePhysicalStock(purchasedItem.getItemId(), purchasedItem.getQuantity());
             }
             returnMap.put("code", 200);
             returnMap.put("data", purchaseOrderMapper.fromEntity(savedOrder));
@@ -94,8 +94,13 @@ public class PurchaseOrderService {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         purchasedItemRepository.deleteByPurchaseOrder(purchaseOrder);
         if (purchaseOrder == null) {
-            throw new RuntimeException("This purchaseorder does not exist.");
+            throw new RuntimeException("This purchaseorder does not exist");
         }
+
+        if (!"draft".equals(purchaseOrder.getStatus())) {
+            throw new RuntimeException("Only draft orders are editable");
+        }
+
         purchaseOrderMapper.copy(purchaseOrderPutDto, purchaseOrder);
         PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);
         Set<PurchasedItem> purchasedItems = purchaseOrder.getPurchasedItems().stream()
@@ -109,7 +114,7 @@ public class PurchaseOrderService {
     public void delete(Long id) {
         PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         if (purchaseOrder == null) {
-            throw new RuntimeException("This purchaseorder does not exist.");
+            throw new RuntimeException("This purchaseorder does not exist");
         } else {
             purchaseOrderRepository.deleteById(id);
             for (PurchasedItem purchasedItem : purchaseOrder.getPurchasedItems()) {
@@ -130,9 +135,42 @@ public class PurchaseOrderService {
             return returnMap;
         }
 
+        purchaseOrder.getPurchasedItems().forEach((purchasedItem) -> {
+            itemRepository.increaseArrivingQuantity(purchasedItem.getItemId(), purchasedItem.getQuantity());
+        });
+
         purchaseOrder.setStatus("confirmed");
+        PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);
+
         returnMap.put("code", 200);
-        returnMap.put("data", purchaseOrderMapper.fromEntity(purchaseOrder));
+        returnMap.put("data", purchaseOrderMapper.fromEntity(saved));
+        return returnMap;
+    }
+
+    @Transactional
+    public Map<String, Object> receive(Long id) {
+        Map<String, Object> returnMap = new HashMap<>();
+
+        PurchaseOrder purchaseOrder = findOneById(id);
+
+        if (!purchaseOrder.getStatus().equals("confirmed")) {
+            returnMap.put("code", 501);
+            returnMap.put("msg", "Order's status must be confirmed");
+            return returnMap;
+        }
+
+        purchaseOrder.getPurchasedItems().forEach((purchasedItem) -> {
+            Long itemId = purchasedItem.getItemId();
+            Long quantity = purchasedItem.getQuantity();
+            itemRepository.decreaseArrivingQuantity(itemId, quantity);
+            itemRepository.increasePhysicalStock(itemId, quantity);
+        });
+
+        purchaseOrder.setStatus("received");
+        PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);
+
+        returnMap.put("code", 200);
+        returnMap.put("data", purchaseOrderMapper.fromEntity(saved));
         return returnMap;
     }
 }

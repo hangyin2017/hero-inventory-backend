@@ -12,7 +12,7 @@ public class PurchaseOrderPostDto {
     private String purchaseorderNumber;
     private String referenceNumber;
     private Date date;
-    private String status;
+    //private String status;
     private Date shipmentDate;
     private String invoicedStatus;
     private String paidStatus;

@@ -65,7 +65,7 @@ public class SalesOrderService {
             for (SoldItem soldItem : salesOrder.getSoldItems()) {
                 soldItem.setSalesOrder(savedOrder);
                 soldItemRepository.save(soldItem);
-                itemRepository.decreaseItemStock(soldItem.getItemId(), soldItem.getQuantity());
+                itemRepository.decreasePhysicalStock(soldItem.getItemId(), soldItem.getQuantity());
             }
             returnMap.put("code", 200);
             returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));

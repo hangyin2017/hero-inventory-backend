@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
@@ -22,12 +21,28 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 
-	@Modifying
-	@Query("update Item set physical_stock=physical_stock- :quantity where item_id= :id")
-	int decreaseItemStock(Long id, Long quantity);
+    @Modifying
+    @Query("update Item" +
+            " set arriving_quantity=arriving_quantity- :quantity" +
+            " where item_id= :id")
+    int decreaseArrivingQuantity(Long id, Long quantity);
+
+    @Modifying
+    @Query("update Item" +
+            " set arriving_quantity=arriving_quantity+ :quantity" +
+            " where item_id= :id")
+    int increaseArrivingQuantity(Long id, Long quantity);
 
 	@Modifying
-    @Query("update Item set physical_stock=physical_stock+ :quantity where item_id= :id")
-    int increaseItemStock(Long id, Long quantity);
+	@Query("update Item" +
+            " set physical_stock=physical_stock- :quantity" +
+            " where item_id= :id")
+	int decreasePhysicalStock(Long id, Long quantity);
+
+	@Modifying
+    @Query("update Item" +
+            " set physical_stock=physical_stock+ :quantity" +
+            " where item_id= :id")
+    int increasePhysicalStock(Long id, Long quantity);
 }
 
