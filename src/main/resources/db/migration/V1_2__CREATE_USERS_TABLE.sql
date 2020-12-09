@@ -1,12 +1,12 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(30),
+    username VARCHAR(30) UNIQUE NOT NULL,
     encoded_password VARCHAR(100)
 );
 
 CREATE TABLE authorities (
     id SERIAL PRIMARY KEY,
-    permission VARCHAR(30)
+    permission VARCHAR(30) UNIQUE NOT NULL
 );
 
 CREATE TABLE users_authorities (

@@ -7,6 +7,7 @@ import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
     public List<UserGetDto> getAll() {
         return userRepository.findAll().stream()
@@ -27,11 +29,16 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserGetDto signUp(UserPostDto userPostDto) {
-        User user = userMapper.toEntity(userPostDto);
+    public UserGetDto addOne(UserPostDto userPostDto) {
+        String username = userPostDto.getUsername();
         String password = userPostDto.getPassword();
+        User user = userMapper.toEntity(userPostDto);
 
-        user.setEncodedPassword(password);
+        if (userRepository.findByUsername(username) != null) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        user.setEncodedPassword(passwordEncoder.encode(password));
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
 
         return userMapper.fromEntity(userRepository.save(user));

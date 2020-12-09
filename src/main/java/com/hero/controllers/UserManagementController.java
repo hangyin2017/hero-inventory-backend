@@ -11,20 +11,20 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/v1/auth")
+@RequestMapping
 @RequiredArgsConstructor
 public class UserManagementController {
 
     private final UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/api/v1/users")
     public ResponseEntity<List<UserGetDto>> getAll() {
         List<UserGetDto> userGetDtoList = userService.getAll();
         return ResponseEntity.ok(userGetDtoList);
     }
 
-    @PostMapping("/signUp")
-    public ResponseEntity<UserGetDto> addOne(@RequestBody UserPostDto userPostDto) {
-        return ResponseEntity.ok(userService.signUp(userPostDto));
+    @PostMapping("/register")
+    public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
+        return ResponseEntity.ok(userService.addOne(userPostDto));
     }
 }
