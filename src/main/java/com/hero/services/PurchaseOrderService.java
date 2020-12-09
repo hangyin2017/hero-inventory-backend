@@ -79,7 +79,7 @@ public class PurchaseOrderService {
         } else {
             StringBuffer msg = new StringBuffer();
 
-            msg.append("Can not create a purchase order without any item");
+            msg.append("Can not create an order without any item");
             returnMap.put("code", 501);
             returnMap.put("msg", msg);
         }

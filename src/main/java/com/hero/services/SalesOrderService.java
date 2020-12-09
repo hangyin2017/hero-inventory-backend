@@ -53,15 +53,22 @@ public class SalesOrderService {
 
         Map<String, Object> returnMap = new HashMap<>();
 
+
         SalesOrder salesOrder = salesOrderMapper.toEntity(salesOrderPostDto);
+        Set<SoldItem> soldItems = salesOrder.getSoldItems();
+
+        if (soldItems.size() <= 0
+                || soldItems.stream().mapToInt(item -> item.getQuantity()).sum() <= 0) {
+            throw new RuntimeException("Can not create an order without any item");
+        }
 
         salesOrder.setStatus("draft");
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
 
-        for (SoldItem soldItem : salesOrder.getSoldItems()) {
+        soldItems.forEach((soldItem -> {
             soldItem.setSalesOrder(savedOrder);
             soldItemRepository.save(soldItem);
-        }
+        }));
 
         returnMap.put("code", 200);
         returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));
