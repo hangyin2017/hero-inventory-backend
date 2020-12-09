@@ -1,9 +1,8 @@
 package com.hero.repositories;
 
-import com.hero.DemoApplication;
-import com.hero.entities.Brand;
+import com.hero.InventoryApplication;
 import com.hero.entities.Item;
-import org.junit.jupiter.api.Assertions;
+import com.hero.utils.Utility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,35 +12,55 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest(classes = DemoApplication.class)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-//public class ItemRepositoryTest {
-//
-//    @Autowired
-//    private ItemRepository itemRepository;
-//
-//    @Test
-//    public void shouldInsertIntoDBGivenCorrectItemObject() {
-//        // Given
-//        Item item = new Item();
-//        item.setName("beauty1");
-//        item.setCode("111");
-//
-//        // When
-//        Item itemInDB = itemRepository.save(item);
-//
-//        // Then
-//        Assertions.assertEquals("beauty1", itemInDB.getName());
-//        Assertions.assertEquals("111", itemInDB.getCode());
-//    }
+import static org.junit.jupiter.api.Assertions.*;
 
-//    @Test
-//    public void test1(){
-//        Brand brand = new Brand();
-//        brand.setName("A2");
-//        brand.setId(Long.parseLong("1"));
-//        List<Item> list= itemRepository.findByBrand(brand);
-//        System.out.println(list.size());
-//    }
-//}
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = InventoryApplication.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class ItemRepositoryTest {
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private  Utility utility;
+
+    //@BeforeEach
+    //private void mockItems() {
+    //    Item item1 = utility.buildItem(1L, "health001", "health1", true);
+    //    Item item2 = utility.buildItem(2L, "health002", "health2", true);
+    //}
+
+    @Test
+    public void shouldReturnItemListGivenItemsHaveBeenInserted() {
+        // Given
+        Item item1 = utility.buildItem(1L, "health001", "health1", true);
+        Item item2 = utility.buildItem(2L, "health002", "health2", true);
+
+        // When
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+
+        // Then
+        List<Item> itemList = itemRepository.findAll();
+        assertEquals(2, itemList.size());
+        assertEquals(item1.getSku(), itemList.get(0).getSku());
+    }
+
+    @Test
+    public void shouldReturnItemGivenItemId(){
+        // Given
+        Item item1 = utility.buildItem(1L, "health001", "health1", true);
+        Item item2 = utility.buildItem(2L, "health002", "health2", true);
+
+        // When
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+
+        // Then
+        Item returnedItem1 = itemRepository.findById(1L).orElse(null);
+        assertEquals(item1.getName(), returnedItem1.getName());
+        Item nullItem = itemRepository.findById(3L).orElse(null);
+        assertNull(nullItem);
+    }
+}

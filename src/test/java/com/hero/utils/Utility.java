@@ -1,7 +1,9 @@
 package com.hero.utils;
 
 import com.hero.entities.Item;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class Utility {
 
     public Item buildItem(Long id,

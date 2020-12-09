@@ -10,14 +10,6 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<Item> findByNameLike(@RequestParam String name);
-
-    List<Item> findBySkuLike(@RequestParam String sku);
-
-    List<Item> findByIdLike(@RequestParam Long id);
-
-	List<Item> findByIdIn(@RequestParam List<String> id);
-
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 
