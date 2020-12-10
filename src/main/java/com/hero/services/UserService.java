@@ -53,6 +53,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public UserGetDto getOne(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
+        return userMapper.fromEntity(user);
+    }
+
     public UserGetDto addOne(UserPostDto userPostDto) {
         checkUsername(userPostDto.getUsername());
         checkEmail(userPostDto.getEmail());

@@ -23,18 +23,24 @@ public class UserManagementController {
         return ResponseEntity.ok(userGetDtoList);
     }
 
-    @PostMapping("/register")
+    @GetMapping("/api/v1/users/{id}")
+    public ResponseEntity<UserGetDto> getOne(@PathVariable Long id) {
+        UserGetDto userGetDto = userService.getOne(id);
+        return ResponseEntity.ok(userGetDto);
+    }
+
+    @PostMapping("/auth/sign-up")
     public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
         return ResponseEntity.ok(userService.addOne(userPostDto));
     }
 
-    @PostMapping("/register/username")
+    @PostMapping("/auth/sign-up/username")
     public ResponseEntity<?> checkUsername(@RequestBody String username) {
         userService.checkUsername(username);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/register/email")
+    @PostMapping("/auth/sign-up/email")
     public ResponseEntity<?> checkEmail(@RequestBody String email) {
         userService.checkEmail(email);
         return ResponseEntity.ok().build();

@@ -14,8 +14,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@GeneratedValue(generator = "uuid")
-    //@GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
