@@ -1,7 +1,7 @@
-INSERT INTO users (username, encoded_password) VALUES
-('admin', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a'),
-('sales', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a'),
-('trainee', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a');
+INSERT INTO users (username, encoded_password, email, status) VALUES
+('admin', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a', 'admin@hero.com', 'verified'),
+('sales', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a', 'sales@hero.com', 'verified'),
+('trainee', '$2a$10$BRMZmPOOaLp5ksyMZMY8rOCphXq8xZtgcsi8svVIeSQnEVMp4LY0a', 'trainee@hero.com', 'verified');
 
 INSERT INTO authorities (permission) VALUES
 ('item:read'),

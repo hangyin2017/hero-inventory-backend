@@ -27,4 +27,16 @@ public class UserManagementController {
     public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
         return ResponseEntity.ok(userService.addOne(userPostDto));
     }
+
+    @PostMapping("/register/username")
+    public ResponseEntity<?> checkUsername(@RequestBody String username) {
+        userService.checkUsername(username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register/email")
+    public ResponseEntity<?> checkEmail(@RequestBody String email) {
+        userService.checkEmail(email);
+        return ResponseEntity.ok().build();
+    }
 }

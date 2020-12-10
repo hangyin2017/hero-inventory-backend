@@ -1,7 +1,9 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(30) UNIQUE NOT NULL,
-    encoded_password VARCHAR(100)
+    encoded_password VARCHAR(100),
+    email VARCHAR(50) UNIQUE NOT NULL,
+    status VARCHAR(20)
 );
 
 CREATE TABLE authorities (

@@ -10,5 +10,7 @@ public class UserGetDto {
 
     private Long id;
     private String username;
+    private String email;
+    private String status;
     private Set<Authority> authorities;
 }
