@@ -56,7 +56,7 @@ public class CustomerService {
         }
         customerMapper.copy(customerPutDto, customer);
 
-        customer.setCustomerId(id);
+        customer.setId(id);
 
         return customerMapper.fromEntity(customerRepository.save(customer));
     }
