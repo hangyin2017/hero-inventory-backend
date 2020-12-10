@@ -1,33 +1,21 @@
 package com.hero.services;
 
-import com.google.common.base.Strings;
 import com.hero.dtos.user.UserGetDto;
 import com.hero.dtos.user.UserPostDto;
 import com.hero.entities.User;
-import com.hero.jwt.JwtConfig;
 import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@ConfigurationProperties(prefix = "application.jwt")
-public class UserService {
+public class AuthService {
 
-    private final SecretKey secretKey;
-    private final JwtConfig jwtConfig;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
@@ -55,55 +43,6 @@ public class UserService {
         if (password == null || password.length() < PASSWORD_MIN_LENGTH) {
             throw new RuntimeException("Password cannot be less than " + PASSWORD_MIN_LENGTH + " characters");
         }
-    }
-
-    public String getTokenFromHeader(String authorizationHeader) {
-        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
-            throw new RuntimeException("Invalid token");
-        }
-
-        String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), "");
-
-        return token;
-    }
-
-    public UserGetDto getByToken(String token) {
-        String username;
-
-        try {
-            username = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Invalid token");
-        }
-
-        return userMapper.fromEntity(userRepository.findByUsername(username));
-    }
-
-    public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
-        List<String> authorizationHeaderList = headers.get(jwtConfig.getAuthorizationHeader());
-
-        if (authorizationHeaderList == null || authorizationHeaderList.get(0) == null) {
-            throw new RuntimeException("Invalid token");
-        }
-
-        String token = getTokenFromHeader(authorizationHeaderList.get(0));
-
-        return getByToken(token);
-    }
-
-    public List<UserGetDto> getAll() {
-        return userRepository.findAll().stream()
-                .map((user -> userMapper.fromEntity(user)))
-                .collect(Collectors.toList());
-    }
-
-    public UserGetDto getOne(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
-        return userMapper.fromEntity(user);
     }
 
     public UserGetDto addOne(UserPostDto userPostDto) {
