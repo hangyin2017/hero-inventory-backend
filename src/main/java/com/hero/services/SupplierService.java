@@ -49,7 +49,7 @@ public class SupplierService {
         }
         supplierMapper.copy(supplierPutDto, supplier);
 
-        supplier.setSupplierId(id);
+        supplier.setId(id);
 
         return supplierMapper.fromEntity(supplierRepository.save(supplier));
     }
