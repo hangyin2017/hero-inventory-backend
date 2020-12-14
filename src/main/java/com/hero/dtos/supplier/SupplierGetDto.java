@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 public class SupplierGetDto {
-    private Long supplierId;
+    private Long id;
     private String supplierName;
     private String companyName;
     private String website;
@@ -22,5 +22,5 @@ public class SupplierGetDto {
     private Date createdTime;
     private Date lastModifiedTime;
     private String comments;
-    private Set<PurchaseOrder> purchaseOrders;
+
 }

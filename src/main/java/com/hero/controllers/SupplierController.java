@@ -1,5 +1,6 @@
 package com.hero.controllers;
 
+import com.hero.dtos.customer.CustomerGetDto;
 import com.hero.dtos.supplier.SupplierGetDto;
 import com.hero.dtos.supplier.SupplierPostDto;
 import com.hero.dtos.supplier.SupplierPutDto;
@@ -21,6 +22,12 @@ public class SupplierController {
     public ResponseEntity<List<SupplierGetDto>> getAll() {
         List<SupplierGetDto> supplierGetDtoList = supplierService.getAll();
         return ResponseEntity.ok(supplierGetDtoList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SupplierGetDto> getOne(@PathVariable Long id) {
+        SupplierGetDto supplierGetDto = supplierService.getOne(id);
+        return ResponseEntity.ok(supplierGetDto);
     }
 
     @PostMapping

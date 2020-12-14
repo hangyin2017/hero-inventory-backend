@@ -35,6 +35,12 @@ public class SupplierService {
         return fromEntity(suppliers);
     }
 
+    public SupplierGetDto getOne(Long id) {
+        Supplier supplier = supplierRepository.findById(id).orElse(null);
+        if (supplier == null) { throw new RuntimeException("Supplier id=" + id + " does not exist."); }
+        return supplierMapper.fromEntity(supplier);
+    }
+
     public SupplierGetDto addOne(SupplierPostDto supplierPostDto) {
         Supplier supplier = supplierMapper.toEntity(supplierPostDto);
         Supplier savedSupplier = supplierRepository.save(supplier);
