@@ -28,6 +28,7 @@ public class UserService {
 
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
+    private final EmailService emailService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
@@ -118,6 +119,8 @@ public class UserService {
         user.setEncodedPassword(passwordEncoder.encode(password));
         user.setStatus("unverified");
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
+
+        emailService.sendVerificationEmail(22L);
 
         return userMapper.fromEntity(userRepository.save(user));
     }
