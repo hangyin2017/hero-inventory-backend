@@ -57,6 +57,18 @@ public class UserService {
         }
     }
 
+    public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
+        List<String> authorizationHeaderList = headers.get(jwtConfig.getAuthorizationHeader());
+
+        if (authorizationHeaderList == null || authorizationHeaderList.get(0) == null) {
+            throw new RuntimeException("Invalid token");
+        }
+
+        String token = getTokenFromHeader(authorizationHeaderList.get(0));
+
+        return getByToken(token);
+    }
+
     public String getTokenFromHeader(String authorizationHeader) {
         if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
             throw new RuntimeException("Invalid token");
@@ -81,18 +93,6 @@ public class UserService {
         }
 
         return userMapper.fromEntity(userRepository.findByUsername(username));
-    }
-
-    public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
-        List<String> authorizationHeaderList = headers.get(jwtConfig.getAuthorizationHeader());
-
-        if (authorizationHeaderList == null || authorizationHeaderList.get(0) == null) {
-            throw new RuntimeException("Invalid token");
-        }
-
-        String token = getTokenFromHeader(authorizationHeaderList.get(0));
-
-        return getByToken(token);
     }
 
     public List<UserGetDto> getAll() {

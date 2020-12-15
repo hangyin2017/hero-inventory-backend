@@ -14,7 +14,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("auth")
 @RequiredArgsConstructor
-public class UserManagementController {
+public class UserAuthController {
 
     private final UserService userService;
 
@@ -35,18 +35,18 @@ public class UserManagementController {
         return ResponseEntity.ok(userGetDto);
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/sign_up")
     public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
         return ResponseEntity.ok(userService.addOne(userPostDto));
     }
 
-    @PostMapping("/sign-up/username")
+    @PostMapping("/sign_up/username")
     public ResponseEntity<?> checkUsername(@RequestBody String username) {
         userService.checkUsername(username);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/sign-up/email")
+    @PostMapping("/sign_up/email")
     public ResponseEntity<?> checkEmail(@RequestBody String email) {
         userService.checkEmail(email);
         return ResponseEntity.ok().build();
