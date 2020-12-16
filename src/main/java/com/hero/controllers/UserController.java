@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("auth")
+@RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
 public class UserController {
 

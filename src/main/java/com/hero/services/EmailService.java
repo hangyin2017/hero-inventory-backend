@@ -18,7 +18,7 @@ public class EmailService {
     //private UserRepository userRepository;
 
     //@Async("taskExecutor")
-    public void sendVerificationEmail(Long userId) {
+    public void sendVerificationEmail(Long userId, String token) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             //EmailVerifier emailVerifier = getEmailVerifierByUserId(userId);
@@ -28,7 +28,7 @@ public class EmailService {
             String text = "Email Verification\n" +
                     "Hero Inventory needs to confirm your email address is valid.\n" +
                     "Please click the link below to confirm you received this mail.\n" +
-                    "https://localhost:3000/api/v1/user/email_verification?token=\n";
+                    "https://localhost:3000/api/v1/user/email_verification?token=" + token + "\n";
             simpleMailMessage.setTo("2012.ewig@gmail.com");
             simpleMailMessage.setSubject("Hero Inventory Email Verification");
             simpleMailMessage.setFrom("inventory.hero@gmail.com");

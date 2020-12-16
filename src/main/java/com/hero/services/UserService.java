@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -108,8 +111,10 @@ public class UserService {
     }
 
     public UserGetDto addOne(UserPostDto userPostDto) {
-        checkUsername(userPostDto.getUsername());
-        checkEmail(userPostDto.getEmail());
+        Long tokenExpirationAfterMinutes = 30L;
+
+        //checkUsername(userPostDto.getUsername());
+        //checkEmail(userPostDto.getEmail());
 
         String password = userPostDto.getPassword();
         checkPassword(password);
@@ -120,7 +125,13 @@ public class UserService {
         user.setStatus("unverified");
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
 
-        emailService.sendVerificationEmail(22L);
+        String token = Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusMinutes(tokenExpirationAfterMinutes)))
+                .signWith(secretKey)
+                .compact();
+        emailService.sendVerificationEmail(22L, token);
 
         return userMapper.fromEntity(userRepository.save(user));
     }
