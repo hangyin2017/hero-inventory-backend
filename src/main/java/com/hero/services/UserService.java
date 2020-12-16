@@ -9,6 +9,7 @@ import com.hero.jwt.JwtConfig;
 import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,18 @@ public class UserService {
         }
     }
 
+    private Claims readJwsBody(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Token expired");
+        }
+    }
+
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
     }
@@ -89,18 +102,7 @@ public class UserService {
     }
 
     public UserGetDto getByToken(String token) {
-        String username;
-
-        try {
-            username = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Invalid token");
-        }
-
+        String username = readJwsBody(token).getSubject();
         return userMapper.fromEntity(userRepository.findByUsername(username));
     }
 
@@ -146,14 +148,20 @@ public class UserService {
     }
 
     public UserGetDto verifyEmail(String token) {
+        String username = readJwsBody(token).getSubject();
+        User user = userRepository.findByUsername(username);
+
+        if (user.getStatus().equals("verified")) {
+            return userMapper.fromEntity(user);
+        }
+
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
         if (emailVerifier == null) { throw new RuntimeException("Invalid token"); }
 
-        Long userId = emailVerifier.getUserId();
-        User user = findUserById(userId);
         user.setStatus("verified");
         user = userRepository.save(user);
+        emailService.deleteEmailVerifier(emailVerifier);
 
         return userMapper.fromEntity(user);
     }

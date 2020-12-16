@@ -51,8 +51,8 @@ public class EmailService {
     public EmailVerifier getEmailVerifierByToken(String token) {
         return emailVerifierRepository.findByToken(token);
     }
-    //
-    //public void setUserEmailVerified(int userId) {
-    //    userRepository.setUserEmailVerified(userId);
-    //}
+
+    public void deleteEmailVerifier(EmailVerifier emailVerifier) {
+        emailVerifierRepository.delete(emailVerifier);
+    }
 }
