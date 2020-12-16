@@ -3,6 +3,7 @@ package com.hero.services;
 import com.google.common.base.Strings;
 import com.hero.dtos.user.UserGetDto;
 import com.hero.dtos.user.UserPostDto;
+import com.hero.entities.EmailVerifier;
 import com.hero.entities.User;
 import com.hero.jwt.JwtConfig;
 import com.hero.mappers.UserMapper;
@@ -61,6 +62,10 @@ public class UserService {
         }
     }
 
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
+    }
+
     public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
         List<String> authorizationHeaderList = headers.get(jwtConfig.getAuthorizationHeader());
 
@@ -106,8 +111,7 @@ public class UserService {
     }
 
     public UserGetDto getOne(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
-        return userMapper.fromEntity(user);
+        return userMapper.fromEntity(findUserById(id));
     }
 
     public UserGetDto addOne(UserPostDto userPostDto) {
@@ -140,4 +144,17 @@ public class UserService {
 
         return userMapper.fromEntity(savedUser);
     }
-}
+
+    public UserGetDto verifyEmail(String token) {
+        EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
+
+        if (emailVerifier == null) { throw new RuntimeException("Invalid token"); }
+
+        Long userId = emailVerifier.getUserId();
+        User user = findUserById(userId);
+        user.setStatus("verified");
+        user = userRepository.save(user);
+
+        return userMapper.fromEntity(user);
+    }
+ }

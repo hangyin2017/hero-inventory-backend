@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmailVerifierRepository extends JpaRepository<EmailVerifier, Long> {
     EmailVerifier findByUserId(Long userId);
+
+    EmailVerifier findByToken(String token);
 }

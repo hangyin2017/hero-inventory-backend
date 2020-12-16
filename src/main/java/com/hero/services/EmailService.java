@@ -28,7 +28,7 @@ public class EmailService {
             String text = "Email Verification\n" +
                     "Hero Inventory needs to confirm your email address is valid.\n" +
                     "Please click the link below to confirm you received this mail.\n" +
-                    "https://localhost:3000/api/v1/user/email_verification?token=" + token;
+                    "http://localhost:8080/api/v1/auth/email_verification?token=" + token;
             simpleMailMessage.setTo("2012.ewig@gmail.com");
             simpleMailMessage.setSubject("Hero Inventory Email Verification");
             simpleMailMessage.setFrom("inventory.hero@gmail.com");
@@ -48,10 +48,9 @@ public class EmailService {
     //    return emailRepository.getEmailVerifierByUserId(userId);
     //}
     //
-    //public EmailVerifier getEmailVerifierByToken(String token) {
-    //    EmailVerifier emailVerifier = emailRepository.getEmailVerifierByToken(token);
-    //    return emailVerifier;
-    //}
+    public EmailVerifier getEmailVerifierByToken(String token) {
+        return emailVerifierRepository.findByToken(token);
+    }
     //
     //public void setUserEmailVerified(int userId) {
     //    userRepository.setUserEmailVerified(userId);

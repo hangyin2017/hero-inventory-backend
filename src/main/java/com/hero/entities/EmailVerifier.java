@@ -20,8 +20,10 @@ public class EmailVerifier {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "token", unique = false, nullable = false)
+    @Column(name = "token", unique = true, nullable = false)
     private String token;
+
+    public EmailVerifier() {}
 
     public EmailVerifier(Long userId, String email, String token) {
         this.userId = userId;

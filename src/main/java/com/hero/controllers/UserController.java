@@ -51,4 +51,9 @@ public class UserController {
         userService.checkEmail(email);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/email_verification")
+    public ResponseEntity<UserGetDto> verifyEmail(@RequestParam String token) {
+        return ResponseEntity.ok(userService.verifyEmail(token));
+    }
 }
