@@ -112,11 +112,12 @@ public class UserService {
 
     public UserGetDto addOne(UserPostDto userPostDto) {
         Long tokenExpirationAfterMinutes = 30L;
-
-        //checkUsername(userPostDto.getUsername());
-        //checkEmail(userPostDto.getEmail());
-
+        String username = userPostDto.getUsername();
         String password = userPostDto.getPassword();
+        String email = userPostDto.getEmail();
+
+        checkUsername(username);
+        checkEmail(email);
         checkPassword(password);
 
         User user = userMapper.toEntity(userPostDto);
@@ -124,15 +125,19 @@ public class UserService {
         user.setEncodedPassword(passwordEncoder.encode(password));
         user.setStatus("unverified");
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
+        User savedUser = userRepository.save(user);
+        Long userId = savedUser.getId();
 
         String token = Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusMinutes(tokenExpirationAfterMinutes)))
                 .signWith(secretKey)
                 .compact();
-        emailService.sendVerificationEmail(22L, token);
 
-        return userMapper.fromEntity(userRepository.save(user));
+        emailService.addEmailVerifier(userId, email, token);
+        emailService.sendVerificationEmail(userId);
+
+        return userMapper.fromEntity(savedUser);
     }
 }
