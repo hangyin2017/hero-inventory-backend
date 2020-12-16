@@ -44,10 +44,10 @@ public class EmailService {
         emailVerifierRepository.save(emailVerifier);
     }
 
-    //public EmailVerifier getEmailVerifierByUserId(int userId) {
-    //    return emailRepository.getEmailVerifierByUserId(userId);
-    //}
-    //
+    public EmailVerifier getEmailVerifierByUserId(Long userId) {
+        return emailVerifierRepository.findByUserId(userId);
+    }
+
     public EmailVerifier getEmailVerifierByToken(String token) {
         return emailVerifierRepository.findByToken(token);
     }
