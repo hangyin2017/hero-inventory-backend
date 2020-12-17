@@ -6,7 +6,7 @@ import com.hero.dtos.user.UserPostDto;
 import com.hero.entities.EmailVerifier;
 import com.hero.entities.User;
 import com.hero.jwt.JwtConfig;
-import com.hero.jwt.JwtUtils;
+import com.hero.jwt.JwtUtility;
 import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
@@ -20,9 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,7 +32,7 @@ public class UserService {
     private int tokenExpirationAfterMinutes;
 
     private final JwtConfig jwtConfig;
-    private final JwtUtils jwtUtils;
+    private final JwtUtility jwtUtility;
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -149,12 +146,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
         Long userId = savedUser.getId();
 
-        String token = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusMinutes(tokenExpirationAfterMinutes)))
-                .signWith(jwtConfig.secretKey())
-                .compact();
+        String token = jwtUtility.createTokenWithExpirationTime(userId.toString(), tokenExpirationAfterMinutes);
 
         emailService.addEmailVerifier(userId, email, token);
         emailService.sendSignUpVerificationEmail(userId);
@@ -175,8 +167,8 @@ public class UserService {
 
     @Transactional
     public UserGetDto verifyEmail(String token) {
-        String username = readJwsBody(token).getSubject();
-        User user = findUserByUsername(username);
+        Long userId = Long.parseLong(readJwsBody(token).getSubject());
+        User user = findUserById(userId);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
         user.setStatus("verified");
@@ -188,18 +180,22 @@ public class UserService {
 
     public void forgetPassword(String email) {
         User user = findUserByEmail(email);
-        String token = jwtUtils.createTokenWithExpirationTime(user.getUsername(), 10);
+        String token = jwtUtility.createTokenWithExpirationTime(user.getId().toString(), 10);
 
         emailService.addEmailVerifier(user.getId(), email, token);
-        emailService.sendResetPasswordVerificationEmail(email);
+        emailService.sendResetPasswordVerificationEmail(user.getId());
     }
 
     @Transactional
     public UserGetDto resetPassword(String token, String newPassword) {
-        String username = readJwsBody(token).getSubject();
-        User user = findUserByUsername(username);
+        Long userId = Long.parseLong(readJwsBody(token).getSubject());
+        User user = findUserById(userId);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
         user.setEncodedPassword(passwordEncoder.encode(newPassword));
+        user = userRepository.save(user);
+        emailService.deleteEmailVerifier(emailVerifier);
+
+        return userMapper.fromEntity(user);
     }
  }

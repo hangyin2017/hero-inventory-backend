@@ -62,4 +62,16 @@ public class UserController {
     public ResponseEntity<UserGetDto> verifyEmail(@RequestParam String token) {
         return ResponseEntity.ok(userService.verifyEmail(token));
     }
+
+    @PostMapping("/forget_password")
+    public ResponseEntity<?> forgetPassword(@RequestBody String email) {
+        userService.forgetPassword(email);
+        return ResponseEntity.ok("Reset password link has been sent to your email");
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestBody String newPassword) {
+        userService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Successfully reset password");
+    }
 }

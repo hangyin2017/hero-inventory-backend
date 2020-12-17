@@ -2,13 +2,15 @@ package com.hero.jwt;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Configuration
 @RequiredArgsConstructor
-public class JwtUtils {
+public class JwtUtility {
 
     private final JwtConfig jwtConfig;
 
