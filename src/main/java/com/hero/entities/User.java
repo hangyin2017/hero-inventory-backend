@@ -29,7 +29,7 @@ public class User {
     @Column(name = "status", unique = false, nullable = true, length = 20)
     private String status;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_authorities",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))

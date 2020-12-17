@@ -2,23 +2,24 @@ package com.hero.services;
 
 import com.hero.entities.EmailVerifier;
 import com.hero.repositories.EmailVerifierRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Data
+@ConfigurationProperties(prefix = "application.config")
 public class EmailService {
 
+    private String host;
+    private String emailHost;
     private final MailSender mailSender;
-
     private final EmailVerifierRepository emailVerifierRepository;
-    //
-    //@Autowired
-    //private UserRepository userRepository;
 
-    //@Async("taskExecutor")
     public void sendVerificationEmail(Long userId) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -28,10 +29,10 @@ public class EmailService {
             String text = "Email Verification\n" +
                     "Hero Inventory needs to confirm your email address is valid.\n" +
                     "Please click the link below to confirm you received this mail.\n" +
-                    "http://localhost:8080/api/v1/auth/email_verification?token=" + token;
-            simpleMailMessage.setTo("2012.ewig@gmail.com");
+                    host + "api/v1/auth/email_verification?token=" + token;
+            simpleMailMessage.setTo(email);
             simpleMailMessage.setSubject("Hero Inventory Email Verification");
-            simpleMailMessage.setFrom("inventory.hero@gmail.com");
+            simpleMailMessage.setFrom(emailHost);
             simpleMailMessage.setText(text);
             mailSender.send(simpleMailMessage);
         } catch(Exception e) {

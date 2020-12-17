@@ -147,13 +147,17 @@ public class UserService {
         return userMapper.fromEntity(savedUser);
     }
 
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
     public UserGetDto verifyEmail(String token) {
         String username = readJwsBody(token).getSubject();
         User user = userRepository.findByUsername(username);
 
-        if (user.getStatus().equals("verified")) {
-            return userMapper.fromEntity(user);
-        }
+        //if (user.getStatus().equals("verified")) {
+        //    return userMapper.fromEntity(user);
+        //}
 
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 

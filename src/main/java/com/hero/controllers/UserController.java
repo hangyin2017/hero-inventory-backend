@@ -52,6 +52,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/email_verification")
     public ResponseEntity<UserGetDto> verifyEmail(@RequestParam String token) {
         return ResponseEntity.ok(userService.verifyEmail(token));
