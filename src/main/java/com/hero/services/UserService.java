@@ -28,8 +28,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Value("${application.email.tokenExpirationAfterMinutes}")
-    private int tokenExpirationAfterMinutes;
+    @Value("${application.email.signUpTokenExpirationAfterMinutes}")
+    private int signUpTokenExpirationAfterMinutes;
+
+    @Value("${application.email.resetPasswordTokenExpirationAfterMinutes}")
+    private int resetPasswordTokenExpirationAfterMinutes;
 
     private final JwtConfig jwtConfig;
     private final JwtUtility jwtUtility;
@@ -146,7 +149,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
         Long userId = savedUser.getId();
 
-        String token = jwtUtility.createTokenWithExpirationTime(userId.toString(), tokenExpirationAfterMinutes);
+        String token = jwtUtility.createTokenWithExpirationTime(userId.toString(), signUpTokenExpirationAfterMinutes);
 
         emailService.addEmailVerifier(userId, email, token);
         emailService.sendSignUpVerificationEmail(userId);
@@ -180,7 +183,8 @@ public class UserService {
 
     public void forgetPassword(String email) {
         User user = findUserByEmail(email);
-        String token = jwtUtility.createTokenWithExpirationTime(user.getId().toString(), 10);
+        String token = jwtUtility.createTokenWithExpirationTime(user.getId().toString(),
+                resetPasswordTokenExpirationAfterMinutes);
 
         emailService.addEmailVerifier(user.getId(), email, token);
         emailService.sendResetPasswordVerificationEmail(user.getId());
