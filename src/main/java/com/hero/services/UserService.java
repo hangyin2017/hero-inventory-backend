@@ -13,12 +13,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -28,10 +28,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@ConfigurationProperties(prefix = "application.jwt")
 public class UserService {
 
-    private final SecretKey secretKey;
+    @Value("${application.jwt.secretKey}")
+    private String secretKey;
+
+    @Value("${application.email.tokenExpirationAfterMinutes}")
+    private int tokenExpirationAfterMinutes;
+
     private final JwtConfig jwtConfig;
     private final EmailService emailService;
     private final UserRepository userRepository;
@@ -66,7 +70,7 @@ public class UserService {
     private Claims readJwsBody(String token) {
         try {
             return Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(jwtConfig.secretKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -116,8 +120,9 @@ public class UserService {
         return userMapper.fromEntity(findUserById(id));
     }
 
+    @Transactional
     public UserGetDto addOne(UserPostDto userPostDto) {
-        Long tokenExpirationAfterMinutes = 30L;
+        //Long tokenExpirationAfterMinutes = 30L;
         String username = userPostDto.getUsername();
         String password = userPostDto.getPassword();
         String email = userPostDto.getEmail();
@@ -138,7 +143,7 @@ public class UserService {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusMinutes(tokenExpirationAfterMinutes)))
-                .signWith(secretKey)
+                .signWith(jwtConfig.secretKey())
                 .compact();
 
         emailService.addEmailVerifier(userId, email, token);
@@ -147,10 +152,18 @@ public class UserService {
         return userMapper.fromEntity(savedUser);
     }
 
+    @Transactional
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        User user = findUserById(id);
+        userRepository.delete(user);
+
+        EmailVerifier emailVerifier = emailService.getEmailVerifierByUserId(id);
+        if (emailVerifier != null) {
+            emailService.deleteEmailVerifier(emailVerifier);
+        }
     }
 
+    @Transactional
     public UserGetDto verifyEmail(String token) {
         String username = readJwsBody(token).getSubject();
         User user = userRepository.findByUsername(username);

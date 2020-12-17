@@ -2,21 +2,22 @@ package com.hero.services;
 
 import com.hero.entities.EmailVerifier;
 import com.hero.repositories.EmailVerifierRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Data
-@ConfigurationProperties(prefix = "application.config")
 public class EmailService {
 
+    @Value("${application.config.host}")
     private String host;
+
+    @Value("${application.email.emailHost}")
     private String emailHost;
+
     private final MailSender mailSender;
     private final EmailVerifierRepository emailVerifierRepository;
 
@@ -55,5 +56,9 @@ public class EmailService {
 
     public void deleteEmailVerifier(EmailVerifier emailVerifier) {
         emailVerifierRepository.delete(emailVerifier);
+    }
+
+    public void deleteEmailVerifierByUserId(Long userId) {
+        emailVerifierRepository.deleteByUserId(userId);
     }
 }

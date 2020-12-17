@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "email_verifier")
+@Table(name = "email_verifiers")
 public class EmailVerifier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class EmailVerifier {
     @Column(name = "userId", unique = true, nullable = false)
     private Long userId;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", unique = false, nullable = false)
     private String email;
 
     @Column(name = "token", unique = true, nullable = false)
