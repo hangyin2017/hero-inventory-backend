@@ -21,20 +21,17 @@ public class EmailService {
     private final MailSender mailSender;
     private final EmailVerifierRepository emailVerifierRepository;
 
-    public void sendVerificationEmail(Long userId) {
+    public void sendVerificationEmail(Long userId, String subject, String text) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
             EmailVerifier emailVerifier = emailVerifierRepository.findByUserId(userId);
             String email = emailVerifier.getEmail();
             String token = emailVerifier.getToken();
-            String text = "Email Verification\n" +
-                    "Hero Inventory needs to confirm your email address is valid.\n" +
-                    "Please click the link below to confirm you received this mail.\n" +
-                    host + "api/v1/auth/email_verification?token=" + token;
+            String textWithToken = text + token;
             simpleMailMessage.setTo(email);
-            simpleMailMessage.setSubject("Hero Inventory Email Verification");
+            simpleMailMessage.setSubject(subject);
             simpleMailMessage.setFrom(emailHost);
-            simpleMailMessage.setText(text);
+            simpleMailMessage.setText(textWithToken);
             mailSender.send(simpleMailMessage);
         } catch(Exception e) {
             e.printStackTrace();
@@ -47,11 +44,15 @@ public class EmailService {
     }
 
     public EmailVerifier getEmailVerifierByUserId(Long userId) {
-        return emailVerifierRepository.findByUserId(userId);
+        EmailVerifier emailVerifier = emailVerifierRepository.findByUserId(userId);
+        if (emailVerifier == null) { throw new RuntimeException("Invalid token"); }
+        return emailVerifier;
     }
 
     public EmailVerifier getEmailVerifierByToken(String token) {
-        return emailVerifierRepository.findByToken(token);
+        EmailVerifier emailVerifier = emailVerifierRepository.findByToken(token);
+        if (emailVerifier == null) { throw new RuntimeException("Invalid token"); }
+        return emailVerifier;
     }
 
     public void deleteEmailVerifier(EmailVerifier emailVerifier) {
@@ -60,5 +61,23 @@ public class EmailService {
 
     public void deleteEmailVerifierByUserId(Long userId) {
         emailVerifierRepository.deleteByUserId(userId);
+    }
+
+    public void sendSignUpVerificationEmail(Long id) {
+        String subject = "Hero Inventory Email Verification";
+        String text = "Email Verification\n" +
+                "Hero Inventory needs to confirm your email address is valid.\n" +
+                "Please click the link below to confirm you received this mail.\n" +
+                host + "api/v1/auth/email_verification?token=";
+        sendVerificationEmail(id, subject, text);
+    }
+
+    public void sendResetPasswordVerificationEmail(String email) {
+        String subject = "Hero Inventory Reset Password";
+        String text = "Reset Password\n" +
+                "You recently requested to reset your password for your Hero Inventory Account.\n" +
+                "Please click the link below to reset.\n" +
+                host + "api/v1/auth/reset_password?token=";
+
     }
 }

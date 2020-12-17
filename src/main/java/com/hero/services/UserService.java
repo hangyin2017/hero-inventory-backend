@@ -6,6 +6,7 @@ import com.hero.dtos.user.UserPostDto;
 import com.hero.entities.EmailVerifier;
 import com.hero.entities.User;
 import com.hero.jwt.JwtConfig;
+import com.hero.jwt.JwtUtils;
 import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
@@ -30,13 +31,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    @Value("${application.jwt.secretKey}")
-    private String secretKey;
-
     @Value("${application.email.tokenExpirationAfterMinutes}")
     private int tokenExpirationAfterMinutes;
 
     private final JwtConfig jwtConfig;
+    private final JwtUtils jwtUtils;
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -80,7 +79,19 @@ public class UserService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("Cannot find the user"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
+    }
+
+    public User findUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) { throw new RuntimeException("User does not exist"); }
+        return user;
+    }
+
+    public User findUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) { throw new RuntimeException("User does not exist"); }
+        return user;
     }
 
     public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
@@ -122,7 +133,6 @@ public class UserService {
 
     @Transactional
     public UserGetDto addOne(UserPostDto userPostDto) {
-        //Long tokenExpirationAfterMinutes = 30L;
         String username = userPostDto.getUsername();
         String password = userPostDto.getPassword();
         String email = userPostDto.getEmail();
@@ -147,7 +157,7 @@ public class UserService {
                 .compact();
 
         emailService.addEmailVerifier(userId, email, token);
-        emailService.sendVerificationEmail(userId);
+        emailService.sendSignUpVerificationEmail(userId);
 
         return userMapper.fromEntity(savedUser);
     }
@@ -166,20 +176,30 @@ public class UserService {
     @Transactional
     public UserGetDto verifyEmail(String token) {
         String username = readJwsBody(token).getSubject();
-        User user = userRepository.findByUsername(username);
-
-        //if (user.getStatus().equals("verified")) {
-        //    return userMapper.fromEntity(user);
-        //}
-
+        User user = findUserByUsername(username);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
-
-        if (emailVerifier == null) { throw new RuntimeException("Invalid token"); }
 
         user.setStatus("verified");
         user = userRepository.save(user);
         emailService.deleteEmailVerifier(emailVerifier);
 
         return userMapper.fromEntity(user);
+    }
+
+    public void forgetPassword(String email) {
+        User user = findUserByEmail(email);
+        String token = jwtUtils.createTokenWithExpirationTime(user.getUsername(), 10);
+
+        emailService.addEmailVerifier(user.getId(), email, token);
+        emailService.sendResetPasswordVerificationEmail(email);
+    }
+
+    @Transactional
+    public UserGetDto resetPassword(String token, String newPassword) {
+        String username = readJwsBody(token).getSubject();
+        User user = findUserByUsername(username);
+        EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
+
+        user.setEncodedPassword(passwordEncoder.encode(newPassword));
     }
  }
