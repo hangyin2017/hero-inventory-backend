@@ -68,7 +68,7 @@ public class EmailService {
         String text = "Email Verification\n" +
                 "Hero Inventory needs to confirm your email address is valid.\n" +
                 "Please click the link below to confirm you received this mail.\n" +
-                host + "api/v1/auth/email_verification?token=";
+                host + "auth/email_verification?token=";
 
         sendVerificationEmail(id, subject, text);
     }
@@ -78,7 +78,7 @@ public class EmailService {
         String text = "Reset Password\n" +
                 "You recently requested to reset your password for your Hero Inventory Account.\n" +
                 "Please click the link below to reset.\n" +
-                host + "api/v1/auth/reset_password?token=";
+                host + "auth/reset_password?token=";
 
         sendVerificationEmail(id, subject, text);
     }

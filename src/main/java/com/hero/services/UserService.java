@@ -10,13 +10,13 @@ import com.hero.jwt.JwtUtility;
 import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
+import com.hero.security.PasswordConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,7 +40,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final AuthorityRepository authorityRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+    private final PasswordConfig passwordConfig;
     private final int USERNAME_MIN_LENGTH = 6;
     private final int PASSWORD_MIN_LENGTH = 8;
 
@@ -143,7 +143,7 @@ public class UserService {
 
         User user = userMapper.toEntity(userPostDto);
 
-        user.setEncodedPassword(passwordEncoder.encode(password));
+        user.setEncodedPassword(passwordConfig.passwordEncoder().encode(password));
         user.setStatus("unverified");
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
         User savedUser = userRepository.save(user);
@@ -191,15 +191,13 @@ public class UserService {
     }
 
     @Transactional
-    public UserGetDto resetPassword(String token, String newPassword) {
+    public void resetPassword(String token, String newPassword) {
         Long userId = Long.parseLong(readJwsBody(token).getSubject());
         User user = findUserById(userId);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
-        user.setEncodedPassword(passwordEncoder.encode(newPassword));
-        user = userRepository.save(user);
+        user.setEncodedPassword(passwordConfig.passwordEncoder().encode(newPassword));
+        userRepository.save(user);
         emailService.deleteEmailVerifier(emailVerifier);
-
-        return userMapper.fromEntity(user);
     }
  }
