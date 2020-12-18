@@ -21,6 +21,9 @@ public class PurchasedItem {
     @Column(name = "item_id")
     private Long itemId;
 
+    @Column(name = "item_name")
+    private String itemName;
+
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "purchaseorder_id")
     private PurchaseOrder purchaseOrder;

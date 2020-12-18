@@ -18,7 +18,9 @@ public class SalesOrderPostDto {
     private String shippedStatus;
     private Date createdTime;
     private Date lastModifiedTime;
-    private Long totalQuality;
+    private Long totalQuantity;
+    private Long totalPrice;
     private String comments;
     private Set<SoldItem> soldItems;
+    private String customer;
 }

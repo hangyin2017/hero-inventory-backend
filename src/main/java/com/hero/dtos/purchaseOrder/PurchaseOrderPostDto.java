@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Data
 public class PurchaseOrderPostDto {
-    private Long purchaseorderId;
     private String purchaseorderNumber;
     private String referenceNumber;
     private Date date;
@@ -19,7 +18,9 @@ public class PurchaseOrderPostDto {
     private String shippedStatus;
     private Date createdTime;
     private Date lastModifiedTime;
-    private Long totalQuality;
+    private Long totalQuantity;
+    private Long totalPrice;
     private String comments;
     private Set<PurchasedItem> purchasedItems;
+    private String supplier;
 }

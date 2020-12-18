@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 public class CustomerPutDto {
     private Long id;
-    private String customerName;
+    private String name;
     private String companyName;
     private String website;
     private Boolean active;

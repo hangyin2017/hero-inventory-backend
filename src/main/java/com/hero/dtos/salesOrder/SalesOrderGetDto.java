@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data
 public class SalesOrderGetDto {
-    private Long salesorderId;
+    private Long Id;
     private String salesorderNumber;
     private String referenceNumber;
     private Date date;
@@ -19,7 +19,9 @@ public class SalesOrderGetDto {
     private String shippedStatus;
     private Date createdTime;
     private Date lastModifiedTime;
-    private Long totalQuality;
+    private Long totalQuantity;
+    private Long totalPrice;
     private String comments;
     private Set<SoldItem> soldItems;
+    private String customer;
 }

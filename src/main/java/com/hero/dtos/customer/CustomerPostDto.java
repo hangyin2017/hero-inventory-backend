@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class CustomerPostDto {
-    private String customerName;
+    private String name;
     private String companyName;
     private String website;
     private Boolean active;
