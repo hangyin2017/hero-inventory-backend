@@ -88,8 +88,6 @@ public class Item {
 
     @Column(name = "arriving_quantity")
     private Integer arrivingQuantity;
-
-
 }
 
 

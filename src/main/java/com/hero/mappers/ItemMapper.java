@@ -32,9 +32,7 @@ public abstract class ItemMapper {
     @Mapping(source = "manufacturer", target = "manufacturer")
     public abstract void copy(ItemPutDto itemPutDto, @MappingTarget Item item);
 
-    public Manufacturer nameToManufacturer(String name) {
-        return manufacturerRepository.findByName(name);
-    }
+    public Manufacturer nameToManufacturer(String name) { return manufacturerRepository.findByName(name); }
 
     public Brand nameToBrand(String name) {
         return brandRepository.findByName(name);

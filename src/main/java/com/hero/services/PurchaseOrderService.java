@@ -61,9 +61,17 @@ public class PurchaseOrderService {
             Integer quantity = purchasedItem.getQuantity();
 
             Item item = itemRepository.findById(id).orElse(null);
+            String name = item.getName();
+
+            purchasedItem.setItemName(name);
+            
             if (quantity > 0) {
                 itemIdList.add(item);
             }
+        }
+
+        if (itemIdList.size() <= 0) {
+            throw new RuntimeException("Can not create an order without any item");
         }
 
         if (itemIdList.size() > 0) {
