@@ -12,7 +12,7 @@ CREATE TABLE purchaseorders (
     created_time TIMESTAMP WITH TIME ZONE,
     last_modified_time TIMESTAMP WITH TIME ZONE,
     total_quantity INT,
-    total_price INT,
+    total_price NUMERIC(14,2),
     comments VARCHAR(255),
     supply_id INT REFERENCES suppliers (supplier_id)
 );
