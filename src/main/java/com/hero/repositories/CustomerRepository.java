@@ -7,5 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 public interface CustomerRepository extends JpaRepository <Customer, Long>{
-    List<Customer> findByCustomerNameLike(@RequestParam String customerName);
+    Customer findByName (String name);
+
+    List<Customer> findByNameLike(@RequestParam String name);
+
 }

@@ -31,7 +31,7 @@ public class CustomerService {
     }
 
     public List<CustomerGetDto> findByName(String name) {
-        List<Customer> customers = customerRepository.findByCustomerNameLike("%" + name.toLowerCase() + "%");
+        List<Customer> customers = customerRepository.findByNameLike("%" + name.toLowerCase() + "%");
 
         return fromEntity(customers);
     }

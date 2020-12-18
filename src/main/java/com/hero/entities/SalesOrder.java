@@ -15,7 +15,7 @@ public class SalesOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "salesorder_id")
-    private Long salesorderId;
+    private Long Id;
 
     @Column(name = "salesorder_number")
     private String salesorderNumber;
@@ -46,6 +46,9 @@ public class SalesOrder {
 
     @Column(name = "total_quantity")
     private Long totalQuantity;
+
+    @Column(name = "total_price")
+    private Long totalPrice;
 
     @Column(name = "comments")
     private String comments;

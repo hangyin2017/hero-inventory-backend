@@ -13,12 +13,14 @@ import com.hero.repositories.SalesOrderRepository;
 import com.hero.repositories.SoldItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@CrossOrigin
 @RequiredArgsConstructor
 public class SalesOrderService {
 
@@ -53,7 +55,6 @@ public class SalesOrderService {
 
         Map<String, Object> returnMap = new HashMap<>();
 
-
         SalesOrder salesOrder = salesOrderMapper.toEntity(salesOrderPostDto);
         Set<SoldItem> soldItems = salesOrder.getSoldItems();
 
@@ -62,11 +63,20 @@ public class SalesOrderService {
             throw new RuntimeException("Can not create an order without any item");
         }
 
+
+
         salesOrder.setStatus("draft");
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
 
         soldItems.forEach((soldItem -> {
             soldItem.setSalesOrder(savedOrder);
+
+            Long id = soldItem.getItemId();
+            Item item = itemRepository.findById(id).orElse(null);
+
+            String name = item.getName();
+            soldItem.setItemName(name);
+
             soldItemRepository.save(soldItem);
         }));
 
@@ -77,8 +87,8 @@ public class SalesOrderService {
     }
 
     @Transactional
-    public SalesOrderGetDto update(Long salesorderId, SalesOrderPutDto salesOrderPutDto) {
-        SalesOrder salesOrder = salesOrderRepository.findById(salesorderId).orElse(null);
+    public SalesOrderGetDto update(Long Id, SalesOrderPutDto salesOrderPutDto) {
+        SalesOrder salesOrder = salesOrderRepository.findById(Id).orElse(null);
         soldItemRepository.deleteBySalesOrder(salesOrder);
         if (salesOrder == null) {
             throw new RuntimeException("This salesorder does not exist");

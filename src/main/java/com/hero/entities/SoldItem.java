@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,6 +22,9 @@ public class SoldItem {
     @Column(name = "item_id")
     private Long itemId;
 
+    @Column(name = "item_name")
+    private String itemName;
+
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "salesorder_id")
     private SalesOrder salesOrder;
@@ -30,6 +34,7 @@ public class SoldItem {
 
     @Column(name = "rate")
     private BigDecimal rate;
+
 
 //    @Override
 //    public String toString() {
