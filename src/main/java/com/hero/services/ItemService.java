@@ -67,4 +67,9 @@ public class ItemService {
 
         itemRepository.deleteById(id);
     }
+
+    public long getCount() {
+        long itemCount = itemRepository.count();
+        return itemCount;
+    }
 }
