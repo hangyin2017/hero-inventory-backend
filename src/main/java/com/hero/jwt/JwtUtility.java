@@ -1,5 +1,7 @@
 package com.hero.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -21,5 +23,19 @@ public class JwtUtility {
                 .setExpiration(Timestamp.valueOf(LocalDateTime.now().plusMinutes(tokenExpirationAfterMinutes)))
                 .signWith(jwtConfig.secretKey())
                 .compact();
+    }
+
+    public Claims readJwsBody(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(jwtConfig.secretKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Token expired");
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid token");
+        }
     }
 }

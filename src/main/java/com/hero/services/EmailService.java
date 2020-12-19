@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailService {
 
-    @Value("${application.config.host}")
-    private String host;
+    @Value("${application.config.clientHost}")
+    private String clientHost;
 
     @Value("${application.email.emailHost}")
     private String emailHost;
@@ -60,7 +60,9 @@ public class EmailService {
     }
 
     public void deleteEmailVerifierByUserId(Long userId) {
-        emailVerifierRepository.deleteByUserId(userId);
+        if (emailVerifierRepository.findByUserId(userId) != null) {
+            emailVerifierRepository.deleteByUserId(userId);
+        }
     }
 
     public void sendSignUpVerificationEmail(Long id) {
@@ -68,7 +70,7 @@ public class EmailService {
         String text = "Email Verification\n" +
                 "Hero Inventory needs to confirm your email address is valid.\n" +
                 "Please click the link below to confirm you received this mail.\n" +
-                host + "auth/email_verification?token=";
+                clientHost + "auth/email_verification?token=";
 
         sendVerificationEmail(id, subject, text);
     }
@@ -78,7 +80,7 @@ public class EmailService {
         String text = "Reset Password\n" +
                 "You recently requested to reset your password for your Hero Inventory Account.\n" +
                 "Please click the link below to reset.\n" +
-                host + "auth/reset_password?token=";
+                clientHost + "auth/reset_password?token=";
 
         sendVerificationEmail(id, subject, text);
     }

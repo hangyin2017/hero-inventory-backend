@@ -11,9 +11,6 @@ import com.hero.mappers.UserMapper;
 import com.hero.repositories.AuthorityRepository;
 import com.hero.repositories.UserRepository;
 import com.hero.security.PasswordConfig;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -66,18 +63,6 @@ public class UserService {
         }
     }
 
-    private Claims readJwsBody(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(jwtConfig.secretKey())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Token expired");
-        }
-    }
-
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
@@ -117,7 +102,7 @@ public class UserService {
     }
 
     public UserGetDto getByToken(String token) {
-        String username = readJwsBody(token).getSubject();
+        String username = jwtUtility.readJwsBody(token).getSubject();
         return userMapper.fromEntity(userRepository.findByUsername(username));
     }
 
@@ -161,16 +146,12 @@ public class UserService {
     public void delete(Long id) {
         User user = findUserById(id);
         userRepository.delete(user);
-
-        EmailVerifier emailVerifier = emailService.getEmailVerifierByUserId(id);
-        if (emailVerifier != null) {
-            emailService.deleteEmailVerifier(emailVerifier);
-        }
+        emailService.deleteEmailVerifierByUserId(id);
     }
 
     @Transactional
     public UserGetDto verifyEmail(String token) {
-        Long userId = Long.parseLong(readJwsBody(token).getSubject());
+        Long userId = Long.parseLong(jwtUtility.readJwsBody(token).getSubject());
         User user = findUserById(userId);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
@@ -192,7 +173,7 @@ public class UserService {
 
     @Transactional
     public void resetPassword(String token, String newPassword) {
-        Long userId = Long.parseLong(readJwsBody(token).getSubject());
+        Long userId = Long.parseLong(jwtUtility.readJwsBody(token).getSubject());
         User user = findUserById(userId);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 

@@ -63,12 +63,10 @@ public class SalesOrderService {
             throw new RuntimeException("Can not create an order without any item");
         }
 
-
-
         salesOrder.setStatus("draft");
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
 
-        soldItems.forEach((soldItem -> {
+        soldItems.forEach((soldItem) -> {
             soldItem.setSalesOrder(savedOrder);
 
             Long id = soldItem.getItemId();
@@ -78,7 +76,7 @@ public class SalesOrderService {
             soldItem.setItemName(name);
 
             soldItemRepository.save(soldItem);
-        }));
+        });
 
         returnMap.put("code", 200);
         returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));
