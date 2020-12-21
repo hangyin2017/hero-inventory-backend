@@ -72,4 +72,9 @@ public class ItemService {
         long itemCount = itemRepository.count();
         return itemCount;
     }
+
+    public long getLowStockCount() {
+        long lowStockCount = itemRepository.getLowStockItem();
+        return lowStockCount;
+    }
 }
