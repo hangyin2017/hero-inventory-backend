@@ -227,4 +227,9 @@ public class SalesOrderService {
 
         return returnMap;
     }
+
+    public long getSalesOrderCount() {
+        long SalesOrderCount = salesOrderRepository.count();
+        return SalesOrderCount;
+    }
 }

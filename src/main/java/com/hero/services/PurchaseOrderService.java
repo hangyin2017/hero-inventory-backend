@@ -181,4 +181,9 @@ public class PurchaseOrderService {
         returnMap.put("data", purchaseOrderMapper.fromEntity(saved));
         return returnMap;
     }
+
+    public long getPurchaseOrderCount() {
+        long PurchaseOrderCount = purchaseOrderRepository.count();
+        return PurchaseOrderCount;
+    }
 }
