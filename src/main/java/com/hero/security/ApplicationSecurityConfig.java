@@ -4,6 +4,7 @@ import com.hero.auth.ApplicationUsersService;
 import com.hero.jwt.JwtConfig;
 import com.hero.jwt.JwtTokenVerifier;
 import com.hero.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+import com.hero.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -37,6 +38,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DaoAuthenticationProvider daoAuthenticationProvider;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -45,7 +49,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),
+                                                                        jwtConfig,
+                                                                        secretKey,
+                        userService))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class);
                 //.authorizeRequests()
                 //.antMatchers("/", "index", "/css/*", "/js/*").permitAll()
