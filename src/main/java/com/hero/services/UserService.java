@@ -63,6 +63,12 @@ public class UserService {
         }
     }
 
+    public void checkStatus(User user) {
+        if("unverified".equals(user.getStatus())) {
+            throw new RuntimeException("Email unverified. Please verify your email first");
+        }
+    }
+
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
@@ -101,9 +107,11 @@ public class UserService {
         return token;
     }
 
+    public UserGetDto getByUsername(String username) { return userMapper.fromEntity(findUserByUsername(username)); }
+
     public UserGetDto getByToken(String token) {
         String username = jwtUtility.readJwsBody(token).getSubject();
-        return userMapper.fromEntity(userRepository.findByUsername(username));
+        return getByUsername(username);
     }
 
     public List<UserGetDto> getAll() {
@@ -132,9 +140,9 @@ public class UserService {
         user.setStatus("unverified");
         user.setAuthorities(Set.of(authorityRepository.findByPermission("ROLE_TRAINEE")));
         User savedUser = userRepository.save(user);
-        Long userId = savedUser.getId();
 
-        String token = jwtUtility.createTokenWithExpirationTime(userId.toString(), signUpTokenExpirationAfterMinutes);
+        Long userId = savedUser.getId();
+        String token = jwtUtility.createTokenWithExpirationTime(username, signUpTokenExpirationAfterMinutes);
 
         emailService.addEmailVerifier(userId, email, token);
         emailService.sendSignUpVerificationEmail(userId);
@@ -151,8 +159,8 @@ public class UserService {
 
     @Transactional
     public UserGetDto verifyEmail(String token) {
-        Long userId = Long.parseLong(jwtUtility.readJwsBody(token).getSubject());
-        User user = findUserById(userId);
+        String username = jwtUtility.readJwsBody(token).getSubject();
+        User user = findUserByUsername(username);
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
         user.setStatus("verified");
@@ -164,17 +172,24 @@ public class UserService {
 
     public void forgetPassword(String email) {
         User user = findUserByEmail(email);
-        String token = jwtUtility.createTokenWithExpirationTime(user.getId().toString(),
-                resetPasswordTokenExpirationAfterMinutes);
+        String username = user.getUsername();
+        Long userId = user.getId();
 
-        emailService.addEmailVerifier(user.getId(), email, token);
-        emailService.sendResetPasswordVerificationEmail(user.getId());
+        checkStatus(user);
+
+        String token = jwtUtility.createTokenWithExpirationTime(username, resetPasswordTokenExpirationAfterMinutes);
+
+        emailService.addEmailVerifier(userId, email, token);
+        emailService.sendResetPasswordVerificationEmail(userId);
     }
 
     @Transactional
     public void resetPassword(String token, String newPassword) {
-        Long userId = Long.parseLong(jwtUtility.readJwsBody(token).getSubject());
-        User user = findUserById(userId);
+        String username = jwtUtility.readJwsBody(token).getSubject();
+        User user = findUserByUsername(username);
+
+        checkStatus(user);
+
         EmailVerifier emailVerifier = emailService.getEmailVerifierByToken(token);
 
         user.setEncodedPassword(passwordConfig.passwordEncoder().encode(newPassword));
