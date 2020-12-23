@@ -50,6 +50,12 @@ public class SalesOrderService {
         return salesOrderMapper.fromEntity(findOneById(id));
     }
 
+    public List<SalesOrderGetDto> findByNumberLike(String searchInput) {
+        List<SalesOrder> salesOrders = salesOrderRepository.findByNumberLike("%" + searchInput.toLowerCase() + "%");
+
+        return fromEntity(salesOrders);
+    }
+
     @Transactional
     public Map<String, Object> addOne(SalesOrderPostDto salesOrderPostDto) {
 
@@ -62,8 +68,6 @@ public class SalesOrderService {
                 || soldItems.stream().mapToInt(item -> item.getQuantity()).sum() <= 0) {
             throw new RuntimeException("Can not create an order without any item");
         }
-
-
 
         salesOrder.setStatus("draft");
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);

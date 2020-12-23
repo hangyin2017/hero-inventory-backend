@@ -47,6 +47,12 @@ public class PurchaseOrderService {
         return purchaseOrderMapper.fromEntity(findOneById(id));
     }
 
+    public List<PurchaseOrderGetDto> findByNumberLike(String searchInput) {
+        List<PurchaseOrder> purchaseOrders = purchaseOrderRepository.findByNumberLike("%" + searchInput.toLowerCase() + "%");
+
+        return fromEntityList(purchaseOrders);
+    }
+
     @Transactional
     public Map<String, Object> addOne(PurchaseOrderPostDto purchaseOrderPostDto) {
 
