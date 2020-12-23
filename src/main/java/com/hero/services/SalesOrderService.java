@@ -93,7 +93,6 @@ public class SalesOrderService {
     @Transactional
     public SalesOrderGetDto update(Long Id, SalesOrderPutDto salesOrderPutDto) {
         SalesOrder salesOrder = salesOrderRepository.findById(Id).orElse(null);
-        soldItemRepository.deleteBySalesOrder(salesOrder);
         if (salesOrder == null) {
             throw new RuntimeException("This salesorder does not exist");
         }
