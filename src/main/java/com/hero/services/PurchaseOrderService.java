@@ -196,7 +196,10 @@ public class PurchaseOrderService {
     }
 
     public long getTotalPrice() {
-        long TotalPrice = purchaseOrderRepository.getTotalPurchaseOrderPrice();
+        long TotalPrice = 0;
+        if (purchaseOrderRepository.count() != 0) {
+            TotalPrice = purchaseOrderRepository.getTotalPurchaseOrderPrice();
+        }
         return TotalPrice;
     }
 }
