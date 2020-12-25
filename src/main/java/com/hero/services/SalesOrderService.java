@@ -240,4 +240,9 @@ public class SalesOrderService {
         long SalesOrderCount = salesOrderRepository.count();
         return SalesOrderCount;
     }
+
+    public long getTotalPrice() {
+        long TotalPrice = salesOrderRepository.getTotalSalesOrderPrice();
+        return TotalPrice;
+    }
 }
