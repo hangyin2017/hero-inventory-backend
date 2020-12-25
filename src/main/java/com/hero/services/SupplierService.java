@@ -30,7 +30,7 @@ public class SupplierService {
     }
 
     public List<SupplierGetDto> findByName(String name) {
-        List<Supplier> suppliers = supplierRepository.findBySupplierNameLike("%" + name.toLowerCase() +"%");
+        List<Supplier> suppliers = supplierRepository.findByNameLike("%" + name.toLowerCase() +"%");
 
         return fromEntity(suppliers);
     }

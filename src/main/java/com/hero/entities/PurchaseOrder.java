@@ -15,7 +15,7 @@ public class PurchaseOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchaseorder_id")
-    private Long purchaseorderId;
+    private Long Id;
 
     @Column(name = "purchaseorder_number")
     private String purchaseorderNumber;
@@ -46,6 +46,9 @@ public class PurchaseOrder {
 
     @Column(name = "total_quantity")
     private Long totalQuantity;
+
+    @Column(name = "total_price")
+    private Long totalPrice;
 
     @Column(name = "comments")
     private String comments;

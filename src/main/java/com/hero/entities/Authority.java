@@ -1,5 +1,6 @@
 package com.hero.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @ToString(exclude = "users")
 @Table(name = "authorities")
+@JsonIgnoreProperties("users")
 public class Authority {
 
     @Id

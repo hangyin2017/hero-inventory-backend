@@ -1,0 +1,77 @@
+package com.hero.controllers;
+
+import com.hero.dtos.user.UserGetDto;
+import com.hero.dtos.user.UserPostDto;
+import com.hero.services.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin
+@RequestMapping("api/v1/auth")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+
+    @GetMapping
+    public ResponseEntity<UserGetDto> getByToken(@RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(userService.getByHeaderWithToken(headers));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<UserGetDto>> getAll() {
+        List<UserGetDto> userGetDtoList = userService.getAll();
+        return ResponseEntity.ok(userGetDtoList);
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserGetDto> getById(@PathVariable Long id) {
+        UserGetDto userGetDto = userService.getOne(id);
+        return ResponseEntity.ok(userGetDto);
+    }
+
+    @PostMapping("/sign_up")
+    public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
+        return ResponseEntity.ok(userService.addOne(userPostDto));
+    }
+
+    @PostMapping("/sign_up/username")
+    public ResponseEntity<?> checkUsername(@RequestBody String username) {
+        userService.checkUsername(username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/sign_up/email")
+    public ResponseEntity<?> checkEmail(@RequestBody String email) {
+        userService.checkEmail(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/email_verification")
+    public ResponseEntity<UserGetDto> verifyEmail(@RequestParam String token) {
+        return ResponseEntity.ok(userService.verifyEmail(token));
+    }
+
+    @PostMapping("/forget_password")
+    public ResponseEntity<?> forgetPassword(@RequestBody String email) {
+        userService.forgetPassword(email);
+        return ResponseEntity.ok("Reset password link has been sent to your email");
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestBody String newPassword) {
+        userService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Successfully reset password");
+    }
+}

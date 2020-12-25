@@ -22,7 +22,7 @@ public class Customer {
     private Long id;
 
     @Column(name = "customer_name")
-    private String customerName;
+    private String name;
 
     @Column(name = "company_name")
     private String companyName;

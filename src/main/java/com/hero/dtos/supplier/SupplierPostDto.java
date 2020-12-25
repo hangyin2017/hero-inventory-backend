@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class SupplierPostDto {
-    private String supplierName;
+    private String name;
     private String companyName;
     private String website;
     private Boolean active;
