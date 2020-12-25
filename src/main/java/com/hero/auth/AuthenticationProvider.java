@@ -13,13 +13,13 @@ public class AuthenticationProvider {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private  ApplicationUsersService applicationUsersService;
+    private AppUserDetailService appUserDetailService;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(applicationUsersService);
+        provider.setUserDetailsService(appUserDetailService);
 
         return provider;
     }
