@@ -194,4 +194,9 @@ public class PurchaseOrderService {
         long PurchaseOrderCount = purchaseOrderRepository.count();
         return PurchaseOrderCount;
     }
+
+    public long getTotalPrice() {
+        long TotalPrice = purchaseOrderRepository.getTotalPurchaseOrderPrice();
+        return TotalPrice;
+    }
 }

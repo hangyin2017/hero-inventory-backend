@@ -33,12 +33,14 @@ public class DashboardController {
         Long salesOrderCount = salesOrderService.getSalesOrderCount();
         Long purchaseOrderCount = purchaseOrderService.getPurchaseOrderCount();
         Long totalSalesOrderPrice = salesOrderService.getTotalPrice();
+        Long totalPurchaseOrderPrice = purchaseOrderService.getTotalPrice();
         HashMap<String, Long> result = new HashMap();
         result.put("itemCount",itemCount);
         result.put("lowStockItemCount",lowStockItemCount);
         result.put("salesOrderCount",salesOrderCount);
         result.put("purchaseOrderCount",purchaseOrderCount);
         result.put("totalSalesOrderPrice",totalSalesOrderPrice);
+        result.put("totalPurchaseOrderPrice",totalPurchaseOrderPrice);
         return ResponseEntity.ok(result);
     }
 
