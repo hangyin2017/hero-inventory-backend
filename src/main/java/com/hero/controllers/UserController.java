@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@CrossOrigin
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
 public class UserController {
@@ -64,14 +64,14 @@ public class UserController {
     }
 
     @PostMapping("/forget_password")
-    public ResponseEntity<?> forgetPassword(@RequestBody String email) {
-        userService.forgetPassword(email);
+    public ResponseEntity<?> forgetPassword(@RequestBody Map<String, String> requestMap) {
+        userService.forgetPassword(requestMap.get("email"));
         return ResponseEntity.ok("Reset password link has been sent to your email");
     }
 
     @PostMapping("/reset_password")
-    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestBody String newPassword) {
-        userService.resetPassword(token, newPassword);
+    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestBody Map<String, String> requestMap) {
+        userService.resetPassword(token, requestMap.get("password"));
         return ResponseEntity.ok("Successfully reset password");
     }
 }
