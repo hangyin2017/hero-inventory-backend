@@ -28,6 +28,11 @@ public class CustomerController {
         return ResponseEntity.ok(customerGetDto);
     }
 
+    @GetMapping("filter")
+    public ResponseEntity<List<CustomerGetDto>> filter(@RequestParam String searchInput) {
+        return ResponseEntity.ok(customerService.findByNameLike(searchInput));
+    }
+
     @PostMapping
     public ResponseEntity<CustomerGetDto> addOne(@RequestBody CustomerPostDto customerPostDto) {
         return ResponseEntity.ok(customerService.addOne(customerPostDto));

@@ -85,6 +85,12 @@ public class UserService {
         return user;
     }
 
+    public List<UserGetDto> fromEntities(List<User> users) {
+        return users.stream()
+                .map((user -> userMapper.fromEntity(user)))
+                .collect(Collectors.toList());
+    }
+
     public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
         List<String> authorizationHeaderList = headers.get(jwtConfig.getAuthorizationHeader());
 
@@ -115,13 +121,17 @@ public class UserService {
     }
 
     public List<UserGetDto> getAll() {
-        return userRepository.findAll().stream()
-                .map((user -> userMapper.fromEntity(user)))
-                .collect(Collectors.toList());
+        return fromEntities(userRepository.findAll());
     }
 
     public UserGetDto getOne(Long id) {
         return userMapper.fromEntity(findUserById(id));
+    }
+
+    public List<UserGetDto> findByNameLike(String name) {
+        List<User> users = userRepository.findByUsernameLike("%" + name.toLowerCase() + "%");
+
+        return fromEntities(users);
     }
 
     @Transactional

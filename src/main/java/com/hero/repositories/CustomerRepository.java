@@ -10,5 +10,4 @@ public interface CustomerRepository extends JpaRepository <Customer, Long>{
     Customer findByName (String name);
 
     List<Customer> findByNameLike(@RequestParam String name);
-
 }

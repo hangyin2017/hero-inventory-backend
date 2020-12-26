@@ -20,20 +20,20 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
 
 
-    private List<CustomerGetDto> fromEntity(List<Customer> customers) {
+    private List<CustomerGetDto> fromEntities(List<Customer> customers) {
         return customers.stream()
                 .map(customer -> customerMapper.fromEntity(customer))
                 .collect(Collectors.toList());
     }
 
     public List<CustomerGetDto> getAll() {
-        return fromEntity(customerRepository.findAll());
+        return fromEntities(customerRepository.findAll());
     }
 
-    public List<CustomerGetDto> findByName(String name) {
+    public List<CustomerGetDto> findByNameLike(String name) {
         List<Customer> customers = customerRepository.findByNameLike("%" + name.toLowerCase() + "%");
 
-        return fromEntity(customers);
+        return fromEntities(customers);
     }
 
     public CustomerGetDto getOne(Long id) {
