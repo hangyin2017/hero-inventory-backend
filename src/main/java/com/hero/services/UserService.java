@@ -70,12 +70,12 @@ public class UserService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User " + id + " does not exist"));
     }
 
     public User findUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        if (user == null) { throw new RuntimeException("User does not exist"); }
+        if (user == null) { throw new RuntimeException("User " + username + " does not exist"); }
         return user;
     }
 

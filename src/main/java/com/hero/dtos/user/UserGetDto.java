@@ -1,9 +1,6 @@
 package com.hero.dtos.user;
 
-import com.hero.entities.Authority;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 public class UserGetDto {
@@ -12,5 +9,5 @@ public class UserGetDto {
     private String username;
     private String email;
     private String status;
-    private Set<Authority> authorities;
+    private String role;
 }
