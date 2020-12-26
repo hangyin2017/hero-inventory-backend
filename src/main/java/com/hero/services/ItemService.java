@@ -67,4 +67,14 @@ public class ItemService {
 
         itemRepository.deleteById(id);
     }
+
+    public long getCount() {
+        long itemCount = itemRepository.count();
+        return itemCount;
+    }
+
+    public long getLowStockCount() {
+        long lowStockCount = itemRepository.getLowStockItem();
+        return lowStockCount;
+    }
 }
