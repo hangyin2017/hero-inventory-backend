@@ -235,4 +235,17 @@ public class SalesOrderService {
 
         return returnMap;
     }
+
+    public long getSalesOrderCount() {
+        long SalesOrderCount = salesOrderRepository.count();
+        return SalesOrderCount;
+    }
+
+    public long getTotalPrice() {
+        long TotalPrice = 0;
+        if (salesOrderRepository.count() != 0) {
+            TotalPrice = salesOrderRepository.getTotalSalesOrderPrice();
+        }
+        return TotalPrice;
+    }
 }
