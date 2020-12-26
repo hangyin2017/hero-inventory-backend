@@ -162,6 +162,10 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
+        if (id == 100001) {
+            throw new RuntimeException("Cannot delete administrator");
+        }
+
         User user = findUserById(id);
         userRepository.delete(user);
         emailService.deleteEmailVerifierByUserId(id);
