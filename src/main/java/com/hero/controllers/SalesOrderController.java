@@ -28,6 +28,11 @@ public class SalesOrderController {
         return ResponseEntity.ok(salesOrderGetDto);
     }
 
+    @GetMapping("filter")
+    public ResponseEntity<List<SalesOrderGetDto>> filterSalesOrders(@RequestParam String searchInput) {
+        return ResponseEntity.ok(salesOrderService.findByNumberLike(searchInput));
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, Object>> addOne(@RequestBody SalesOrderPostDto salesOrderPostDto) {
         Map<String, Object> salesOrderMap= salesOrderService.addOne(salesOrderPostDto);

@@ -28,6 +28,11 @@ public class SupplierController {
         return ResponseEntity.ok(supplierGetDto);
     }
 
+    @GetMapping("filter")
+    public ResponseEntity<List<SupplierGetDto>> filterSuppliers(@RequestParam String searchInput) {
+        return ResponseEntity.ok(supplierService.findByNameLike(searchInput));
+    }
+
     @PostMapping
     public ResponseEntity<SupplierGetDto> addOne(@RequestBody SupplierPostDto supplierPostDto) {
         return ResponseEntity.ok(supplierService.addOne(supplierPostDto));

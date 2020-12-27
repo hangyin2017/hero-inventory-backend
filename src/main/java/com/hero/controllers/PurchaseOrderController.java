@@ -30,6 +30,11 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(purchaseOrderGetDto);
     }
 
+    @GetMapping("filter")
+    public ResponseEntity<List<PurchaseOrderGetDto>> filterPurchaseOrders(@RequestParam String searchInput) {
+        return ResponseEntity.ok(purchaseOrderService.findByNumberLike(searchInput));
+    }
+
     @PostMapping
     public ResponseEntity<Map<String, Object>> addOne(@RequestBody PurchaseOrderPostDto purchaseOrderPostDto) {
         Map<String, Object> purchaseOrderMap = purchaseOrderService.addOne(purchaseOrderPostDto);

@@ -50,6 +50,12 @@ public class SalesOrderService {
         return salesOrderMapper.fromEntity(findOneById(id));
     }
 
+    public List<SalesOrderGetDto> findByNumberLike(String searchInput) {
+        List<SalesOrder> salesOrders = salesOrderRepository.findByNumberLike("%" + searchInput.toLowerCase() + "%");
+
+        return fromEntity(salesOrders);
+    }
+
     @Transactional
     public Map<String, Object> addOne(SalesOrderPostDto salesOrderPostDto) {
 
