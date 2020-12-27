@@ -11,4 +11,7 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
 
     @Query("select purchaseOrder from PurchaseOrder purchaseOrder where lower(purchaseOrder.purchaseorderNumber) like :searchInput")
     List<PurchaseOrder> findByNumberLike(@RequestParam String searchInput);
+
+    @Query(value = "select sum(total_price) from purchaseorders",nativeQuery = true)
+    long getTotalPurchaseOrderPrice();
 }
