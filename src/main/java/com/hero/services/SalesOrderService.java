@@ -72,7 +72,7 @@ public class SalesOrderService {
         salesOrder.setStatus("draft");
         SalesOrder savedOrder = salesOrderRepository.save(salesOrder);
 
-        soldItems.forEach((soldItem -> {
+        soldItems.forEach((soldItem) -> {
             soldItem.setSalesOrder(savedOrder);
 
             Long id = soldItem.getItemId();
@@ -82,7 +82,7 @@ public class SalesOrderService {
             soldItem.setItemName(name);
 
             soldItemRepository.save(soldItem);
-        }));
+        });
 
         returnMap.put("code", 200);
         returnMap.put("data", salesOrderMapper.fromEntity(savedOrder));
@@ -240,5 +240,18 @@ public class SalesOrderService {
         }
 
         return returnMap;
+    }
+
+    public long getSalesOrderCount() {
+        long SalesOrderCount = salesOrderRepository.count();
+        return SalesOrderCount;
+    }
+
+    public long getTotalPrice() {
+        long TotalPrice = 0;
+        if (salesOrderRepository.count() != 0) {
+            TotalPrice = salesOrderRepository.getTotalSalesOrderPrice();
+        }
+        return TotalPrice;
     }
 }

@@ -1,6 +1,5 @@
 package com.hero.controllers;
 
-import com.hero.dtos.customer.CustomerGetDto;
 import com.hero.dtos.supplier.SupplierGetDto;
 import com.hero.dtos.supplier.SupplierPostDto;
 import com.hero.dtos.supplier.SupplierPutDto;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("api/v1/suppliers")
 @RequiredArgsConstructor

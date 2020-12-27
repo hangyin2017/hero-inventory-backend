@@ -13,6 +13,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 
+    @Query(value = "select count(*) from items where physical_stock < 10",nativeQuery = true)
+    long getLowStockItem();
+
 	@Modifying
 	@Query("update Item" +
             " set physical_stock=physical_stock- :quantity" +

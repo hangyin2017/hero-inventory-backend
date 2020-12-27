@@ -17,11 +17,17 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false, length = 30)
     private String username;
 
-    @Column(name = "encoded_password", unique = false, nullable = false)
+    @Column(name = "encoded_password", unique = false, nullable = false, length = 100)
     private String encodedPassword;
+
+    @Column(name = "email", unique = true, nullable = false, length = 50)
+    private String email;
+
+    @Column(name = "status", unique = false, nullable = true, length = 20)
+    private String status;
 
     @ManyToMany
     @JoinTable(name = "users_authorities",

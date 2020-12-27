@@ -1,6 +1,8 @@
 package com.hero.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hero.dtos.user.UserGetDto;
+import com.hero.services.UserService;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
+    private final UserService userService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -50,14 +54,18 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
+        String username = authResult.getName();
         String token = Jwts.builder()
-                .setSubject(authResult.getName())
+                .setSubject(username)
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
                 .signWith(secretKey)
                 .compact();
 
+        UserGetDto userGetDto = userService.getByToken(token);
+        String userJson = objectMapper.writeValueAsString(userGetDto);
+        response.getWriter().write(userJson);
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
     }
 }

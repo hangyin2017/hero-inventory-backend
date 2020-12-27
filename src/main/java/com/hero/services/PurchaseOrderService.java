@@ -195,4 +195,17 @@ public class PurchaseOrderService {
         returnMap.put("data", purchaseOrderMapper.fromEntity(saved));
         return returnMap;
     }
+
+    public long getPurchaseOrderCount() {
+        long PurchaseOrderCount = purchaseOrderRepository.count();
+        return PurchaseOrderCount;
+    }
+
+    public long getTotalPrice() {
+        long TotalPrice = 0;
+        if (purchaseOrderRepository.count() != 0) {
+            TotalPrice = purchaseOrderRepository.getTotalPurchaseOrderPrice();
+        }
+        return TotalPrice;
+    }
 }
