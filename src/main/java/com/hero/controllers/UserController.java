@@ -46,14 +46,14 @@ public class UserController {
     }
 
     @PostMapping("/sign_up/username")
-    public ResponseEntity<?> checkUsername(@RequestBody String username) {
-        userService.checkUsername(username);
+    public ResponseEntity<?> checkUsername(@RequestBody Map<String, String> requestMap) {
+        userService.checkUsername(requestMap.get("username"));
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/sign_up/email")
-    public ResponseEntity<?> checkEmail(@RequestBody String email) {
-        userService.checkEmail(email);
+    public ResponseEntity<?> checkEmail(@RequestBody Map<String, String> requestMap) {
+        userService.checkEmail(requestMap.get("email"));
         return ResponseEntity.ok().build();
     }
 
