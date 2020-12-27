@@ -35,6 +35,11 @@ public class UserController {
         return ResponseEntity.ok(userGetDto);
     }
 
+    @GetMapping("/users/filter")
+    public ResponseEntity<List<UserGetDto>> filter(@RequestParam String searchInput) {
+        return ResponseEntity.ok(userService.findByNameLike(searchInput));
+    }
+
     @PostMapping("/sign_up")
     public ResponseEntity<UserGetDto> register(@RequestBody UserPostDto userPostDto) {
         return ResponseEntity.ok(userService.addOne(userPostDto));
@@ -69,7 +74,7 @@ public class UserController {
         return ResponseEntity.ok("Reset password link has been sent to your email");
     }
 
-    @PostMapping("/reset_password")
+    @PutMapping("/reset_password")
     public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestBody Map<String, String> requestMap) {
         userService.resetPassword(token, requestMap.get("password"));
         return ResponseEntity.ok("Successfully reset password");

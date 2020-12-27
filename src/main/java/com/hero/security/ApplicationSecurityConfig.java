@@ -1,6 +1,6 @@
 package com.hero.security;
 
-import com.hero.auth.ApplicationUsersService;
+import com.hero.auth.AppUserDetailService;
 import com.hero.jwt.JwtConfig;
 import com.hero.jwt.JwtTokenVerifier;
 import com.hero.jwt.JwtUsernameAndPasswordAuthenticationFilter;
@@ -27,7 +27,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private ApplicationUsersService applicationUsersService;
+    private AppUserDetailService appUserDetailService;
 
     @Autowired
     private SecretKey secretKey;

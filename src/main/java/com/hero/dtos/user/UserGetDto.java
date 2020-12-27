@@ -12,5 +12,6 @@ public class UserGetDto {
     private String username;
     private String email;
     private String status;
+    private String role;
     private Set<Authority> authorities;
 }

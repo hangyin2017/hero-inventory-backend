@@ -29,7 +29,7 @@ public class CustomerController {
     }
 
     @GetMapping("filter")
-    public ResponseEntity<List<CustomerGetDto>> filterCustomers(@RequestParam String searchInput) {
+    public ResponseEntity<List<CustomerGetDto>> filter(@RequestParam String searchInput) {
         return ResponseEntity.ok(customerService.findByNameLike(searchInput));
     }
 

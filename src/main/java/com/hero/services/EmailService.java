@@ -67,9 +67,11 @@ public class EmailService {
 
     public void sendSignUpVerificationEmail(Long id) {
         String subject = "Hero Inventory Email Verification";
-        String text = "Email Verification\n" +
-                "Hero Inventory needs to confirm your email address is valid.\n" +
-                "Please click the link below to confirm you received this mail.\n" +
+        String text =
+                "Email Verification\n\n" +
+                "Thank your for registering Hero Inventory. User ID: " + id + "\n\n" +
+                "Hero Inventory needs to confirm your email address is valid.\n\n" +
+                "Please click the link below to confirm you received this mail.\n\n" +
                 clientHost + "auth/email_verification?token=";
 
         sendVerificationEmail(id, subject, text);
@@ -77,9 +79,11 @@ public class EmailService {
 
     public void sendResetPasswordVerificationEmail(Long id) {
         String subject = "Hero Inventory Reset Password";
-        String text = "Reset Password\n" +
-                "You recently requested to reset your password for your Hero Inventory Account.\n" +
-                "Please click the link below to reset.\n" +
+        String text =
+                "Reset Password\n\n" +
+                "You recently requested to reset your password for your Hero Inventory Account.\n\n" +
+                "User ID: " + id + "\n\n" +
+                "Please click the link below to reset.\n\n" +
                 clientHost + "auth/reset_password?token=";
 
         sendVerificationEmail(id, subject, text);

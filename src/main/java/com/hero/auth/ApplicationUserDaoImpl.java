@@ -2,7 +2,7 @@ package com.hero.auth;
 
 import com.hero.entities.Authority;
 import com.hero.entities.User;
-import com.hero.repositories.UserRepository;
+import com.hero.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 public class ApplicationUserDaoImpl implements ApplicationUserDao {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public Optional<UserDetails> getApplicationUserByName(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userService.findUserByUsername(username);
 
         UserDetails userDetails = new ApplicationUser(
                 user.getUsername(),

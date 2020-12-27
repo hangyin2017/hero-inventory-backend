@@ -70,12 +70,12 @@ public class UserService {
     }
 
     public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User does not exist"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User " + id + " does not exist"));
     }
 
     public User findUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        if (user == null) { throw new RuntimeException("User does not exist"); }
+        if (user == null) { throw new RuntimeException("User " + username + " does not exist"); }
         return user;
     }
 
@@ -83,6 +83,12 @@ public class UserService {
         User user = userRepository.findByEmail(email);
         if (user == null) { throw new RuntimeException("User does not exist"); }
         return user;
+    }
+
+    public List<UserGetDto> fromEntities(List<User> users) {
+        return users.stream()
+                .map((user -> userMapper.fromEntity(user)))
+                .collect(Collectors.toList());
     }
 
     public UserGetDto getByHeaderWithToken(HttpHeaders headers) {
@@ -115,13 +121,17 @@ public class UserService {
     }
 
     public List<UserGetDto> getAll() {
-        return userRepository.findAll().stream()
-                .map((user -> userMapper.fromEntity(user)))
-                .collect(Collectors.toList());
+        return fromEntities(userRepository.findAll());
     }
 
     public UserGetDto getOne(Long id) {
         return userMapper.fromEntity(findUserById(id));
+    }
+
+    public List<UserGetDto> findByNameLike(String name) {
+        List<User> users = userRepository.findByUsernameLike("%" + name.toLowerCase() + "%");
+
+        return fromEntities(users);
     }
 
     @Transactional
@@ -152,6 +162,10 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
+        if (id == 100001) {
+            throw new RuntimeException("Cannot delete administrator");
+        }
+
         User user = findUserById(id);
         userRepository.delete(user);
         emailService.deleteEmailVerifierByUserId(id);
