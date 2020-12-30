@@ -227,13 +227,12 @@ public class SalesOrderService {
             StringBuffer msg = new StringBuffer();
 
             msg.append("No enough items in stock.");
-            msg.append("Current stock of ");
+            msg.append(" Current stock of ");
             for (Item item : itemIdList) {
                 msg.append("item ");
                 msg.append(item.getId());
                 msg.append(" is ");
                 msg.append(item.getPhysicalStock());
-                msg.append(", ");
             }
             returnMap.put("code", 501);
             returnMap.put("msg", msg);

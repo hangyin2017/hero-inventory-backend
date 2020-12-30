@@ -65,7 +65,11 @@ public class ItemService {
     public void delete(Long id){
         Item item = findItem(id);
 
-        itemRepository.deleteById(id);
+        try {
+            itemRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot delete item with related orders");
+        }
     }
 
     public long getCount() {
