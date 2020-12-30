@@ -10,10 +10,14 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    //@Override
+    @Query(value = "SELECT * FROM items ORDER BY last_modified_time DESC", nativeQuery = true)
+    List<Item> findAll();
+
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
 
-    @Query(value = "select count(*) from items where physical_stock < 10",nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM items WHERE physical_stock < 10", nativeQuery = true)
     long getLowStockItem();
 
 	@Modifying
