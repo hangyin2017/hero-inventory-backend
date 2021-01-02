@@ -14,6 +14,8 @@ CREATE TABLE purchaseorders (
     total_quantity INT,
     total_price NUMERIC(14,2),
     comments VARCHAR(255),
+    shipment_price NUMERIC(14,2),
+    adjustment_price NUMERIC(14,2),
     supply_id INT REFERENCES suppliers (supplier_id)
 );
 

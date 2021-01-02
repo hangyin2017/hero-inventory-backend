@@ -21,6 +21,8 @@ public class PurchaseOrderPostDto {
     private Long totalQuantity;
     private Long totalPrice;
     private String comments;
+    private Long shipmentPrice;
+    private Long adjustmentPrice;
     private Set<PurchasedItem> purchasedItems;
     private String supplier;
 }

@@ -53,6 +53,12 @@ public class PurchaseOrder {
     @Column(name = "comments")
     private String comments;
 
+    @Column(name = "shipment_price")
+    private Long shipmentPrice;
+
+    @Column(name = "adjustment_price")
+    private Long adjustmentPrice;
+
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PurchasedItem> purchasedItems;
 

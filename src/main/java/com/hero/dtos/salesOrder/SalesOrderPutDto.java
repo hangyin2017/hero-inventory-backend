@@ -22,6 +22,8 @@ public class SalesOrderPutDto {
     private Long totalQuantity;
     private Long totalPrice;
     private String comments;
+    private Long shipmentPrice;
+    private Long adjustmentPrice;
     private Set<SoldItem> soldItems;
     private String customer;
 }
