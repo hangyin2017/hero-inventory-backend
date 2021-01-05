@@ -50,9 +50,6 @@ public class Item {
     @Column(name = "cost_price")
     private BigDecimal costPrice;
 
-    @Column(name = "apply_gst")
-    private Boolean applyGst;
-
     @Column(name = "length")
     private Double length;
 

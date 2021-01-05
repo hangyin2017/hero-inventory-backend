@@ -22,6 +22,7 @@ public class PurchaseOrderPutDto {
     private Long totalQuantity;
     private Long totalPrice;
     private String comments;
+    private Boolean applyGst;
     private Long shipmentPrice;
     private Long adjustmentPrice;
     private Set<PurchasedItem> purchasedItems;

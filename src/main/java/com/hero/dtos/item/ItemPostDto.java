@@ -18,7 +18,6 @@ public class ItemPostDto {
     private String manufacturer;
     private BigDecimal sellingPrice;
     private BigDecimal costPrice;
-    private Boolean applyGst;
     private Double length;
     private Double width;
     private Double height;

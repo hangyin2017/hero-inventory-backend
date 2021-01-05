@@ -53,6 +53,9 @@ public class SalesOrder {
     @Column(name = "comments")
     private String comments;
 
+    @Column(name = "apply_gst")
+    private Boolean applyGst;
+
     @Column(name = "shipment_price")
     private Long shipmentPrice;
 
