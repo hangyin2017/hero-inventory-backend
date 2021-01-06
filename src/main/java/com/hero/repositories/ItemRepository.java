@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -16,6 +17,12 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select item from Item item where lower(item.name) like :searchInput or lower(item.sku) like :searchInput")
     List<Item> findByNameOrSkuLike(@RequestParam String searchInput);
+
+    @Query("select physicalStock from Item where id= :id")
+    Long getPhysicalStockById(Long id);
+
+    @Query("select averageCost from Item where id= :id")
+    Long getAverageCostById(Long id);
 
     @Query(value = "SELECT COUNT(*) FROM items WHERE physical_stock < 10", nativeQuery = true)
     long getLowStockItem();
@@ -55,5 +62,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " set arriving_quantity=arriving_quantity+ :quantity" +
             " where item_id= :id")
     int increaseArrivingQuantity(Long id, Integer quantity);
+
+    @Modifying
+    @Query("update Item" +
+//            " set average_cost=(average_cost*physical_stock+arriving_quantity* :rate)/(physical_stock+arriving_quantity)" +
+            " set average_cost= :result" +
+
+            " where item_id= :id")
+    int updateAverageCost(Long id, BigDecimal result);
+//    (average_cost*physical_stock+arriving_quantity* :rate)/(physical_stock+arriving_quantity)
 }
 
