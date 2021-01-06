@@ -3,6 +3,7 @@ package com.hero.dtos.purchaseOrder;
 import com.hero.entities.PurchasedItem;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -19,11 +20,11 @@ public class PurchaseOrderPostDto {
     private Date createdTime;
     private Date lastModifiedTime;
     private Long totalQuantity;
-    private Long totalPrice;
+    private BigDecimal totalPrice;
     private String comments;
     private Boolean applyGst;
-    private Long shipmentPrice;
-    private Long adjustmentPrice;
+    private BigDecimal shipmentPrice;
+    private BigDecimal adjustmentPrice;
     private Set<PurchasedItem> purchasedItems;
     private String supplier;
 }

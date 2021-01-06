@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class PurchaseOrder {
     private Long totalQuantity;
 
     @Column(name = "total_price")
-    private Long totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(name = "comments")
     private String comments;
@@ -57,10 +58,10 @@ public class PurchaseOrder {
     private Boolean applyGst;
 
     @Column(name = "shipment_price")
-    private Long shipmentPrice;
+    private BigDecimal shipmentPrice;
 
     @Column(name = "adjustment_price")
-    private Long adjustmentPrice;
+    private BigDecimal adjustmentPrice;
 
     @OneToMany(mappedBy = "purchaseOrder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PurchasedItem> purchasedItems;
