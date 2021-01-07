@@ -22,5 +22,6 @@ CREATE TABLE items (
     last_modified_time TIMESTAMP WITH TIME ZONE,
     physical_stock INT,
     locked_stock INT,
-    arriving_quantity INT
+    arriving_quantity INT,
+    average_cost NUMERIC(14,2)
 );

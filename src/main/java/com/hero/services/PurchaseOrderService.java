@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,7 +160,13 @@ public class PurchaseOrderService {
 
         purchaseOrder.getPurchasedItems().forEach((purchasedItem) -> {
             itemRepository.increaseArrivingQuantity(purchasedItem.getItemId(), purchasedItem.getQuantity());
+            Long physicalStock = itemRepository.getPhysicalStockById(purchasedItem.getItemId());
+            Long averageCost = itemRepository.getAverageCostById(purchasedItem.getItemId());
+            BigDecimal sum = purchasedItem.getRate().multiply(new BigDecimal(purchasedItem.getQuantity())).add(new BigDecimal(physicalStock*averageCost));
+            BigDecimal result = sum.divide(new BigDecimal(physicalStock + purchasedItem.getQuantity()));
+            itemRepository.updateAverageCost(purchasedItem.getItemId(),result);
         });
+
 
         purchaseOrder.setStatus("confirmed");
         PurchaseOrder saved = purchaseOrderRepository.save(purchaseOrder);

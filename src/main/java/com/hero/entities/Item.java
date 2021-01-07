@@ -85,6 +85,9 @@ public class Item {
 
     @Column(name = "arriving_quantity")
     private Integer arrivingQuantity;
+
+    @Column(name = "average_cost")
+    private BigDecimal averageCost;
 }
 
 
