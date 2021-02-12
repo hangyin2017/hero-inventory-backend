@@ -1,3 +1,9 @@
+CREATE TABLE resources (
+    resource_id SERIAL PRIMARY KEY,
+    link VARCHAR(255),
+    type VARCHAR(30)
+);
+
 CREATE TABLE items (
     item_id SERIAL PRIMARY KEY,
     sku VARCHAR(30),
